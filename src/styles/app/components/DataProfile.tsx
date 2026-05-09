@@ -4,7 +4,7 @@ interface DataProfileProps {
 
 export function DataProfile({ data }: DataProfileProps) {
   if (!data || data.length === 0) {
-    return <div className="text-gray-500">No data available</div>;
+    return <div className="text-[#D7DFEA]">No data available</div>;
   }
 
   const columns = Object.keys(data[0]);
@@ -55,43 +55,43 @@ export function DataProfile({ data }: DataProfileProps) {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-blue-50 p-4 rounded-lg">
-          <div className="text-gray-600 text-sm">Total Rows</div>
+          <div className="text-[#10263f] text-sm">Total Rows</div>
           <div className="text-2xl mt-1">{rowCount.toLocaleString()}</div>
         </div>
         <div className="bg-green-50 p-4 rounded-lg">
-          <div className="text-gray-600 text-sm">Total Columns</div>
+          <div className="text-[#10263f] text-sm">Total Columns</div>
           <div className="text-2xl mt-1">{columnCount}</div>
         </div>
         <div className="bg-purple-50 p-4 rounded-lg">
-          <div className="text-gray-600 text-sm">Data Points</div>
+          <div className="text-[#10263f] text-sm">Data Points</div>
           <div className="text-2xl mt-1">{(rowCount * columnCount).toLocaleString()}</div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white rounded-lg border border-[#D7DFEA] overflow-hidden">
+        <div className="overflow-auto max-h-[50vh]">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-white border-b border-[#D7DFEA]">
               <tr>
-                <th className="px-4 py-3 text-left text-sm text-gray-700">Column</th>
-                <th className="px-4 py-3 text-left text-sm text-gray-700">Type</th>
-                <th className="px-4 py-3 text-left text-sm text-gray-700">Non-Null</th>
-                <th className="px-4 py-3 text-left text-sm text-gray-700">Missing</th>
-                <th className="px-4 py-3 text-left text-sm text-gray-700">Unique</th>
-                <th className="px-4 py-3 text-left text-sm text-gray-700">Statistics</th>
+                <th className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] bg-white z-10">Column</th>
+                <th className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] bg-white z-10">Type</th>
+                <th className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] bg-white z-10">Non-Null</th>
+                <th className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] bg-white z-10">Missing</th>
+                <th className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] bg-white z-10">Unique</th>
+                <th className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] bg-white z-10">Statistics</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-[#D7DFEA]">
               {columns.map((column) => {
                 const stats = getColumnStats(column);
                 return (
-                  <tr key={column} className="hover:bg-gray-50">
+                  <tr key={column} className="hover:bg-[#f8fbff]">
                     <td className="px-4 py-3 text-sm">{column}</td>
                     <td className="px-4 py-3 text-sm">
                       <span className={`px-2 py-1 rounded text-xs ${
                         stats.dataType === 'number' ? 'bg-blue-100 text-blue-800' :
                         stats.dataType === 'date' ? 'bg-green-100 text-green-800' :
-                        'bg-gray-100 text-gray-800'
+                        'bg-[#D7DFEA] text-[#10263f]'
                       }`}>
                         {stats.dataType}
                       </span>
@@ -103,7 +103,7 @@ export function DataProfile({ data }: DataProfileProps) {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm">{stats.uniqueCount}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-[#10263f]">
                       {stats.dataType === 'number' && (
                         <div className="text-xs">
                           Min: {stats.min} | Max: {stats.max} | Mean: {stats.mean}

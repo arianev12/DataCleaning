@@ -22,11 +22,11 @@ export function DataComparison({ originalData, cleanedData, operations }: DataCo
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-red-50 p-4 rounded-lg">
-          <div className="text-gray-600 text-sm">Original Dataset</div>
+          <div className="text-[#10263f] text-sm">Original Dataset</div>
           <div className="text-2xl mt-1">{originalData.length} rows</div>
         </div>
         <div className="bg-green-50 p-4 rounded-lg">
-          <div className="text-gray-600 text-sm">Cleaned Dataset</div>
+          <div className="text-[#10263f] text-sm">Cleaned Dataset</div>
           <div className="text-2xl mt-1">{cleanedData.length} rows</div>
         </div>
       </div>
@@ -36,19 +36,19 @@ export function DataComparison({ originalData, cleanedData, operations }: DataCo
           <h4 className="mb-2">Applied Operations:</h4>
           <ul className="list-disc list-inside space-y-1">
             {operations.map((op, idx) => (
-              <li key={idx} className="text-sm text-gray-700">{op}</li>
+              <li key={idx} className="text-sm text-[#10263f]">{op}</li>
             ))}
           </ul>
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-white rounded-lg border border-[#D7DFEA] p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-2">
             <button
               onClick={() => setShowOriginal(true)}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                showOriginal ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                showOriginal ? 'bg-blue-600 text-white' : 'bg-[#D7DFEA] text-[#10263f] hover:bg-[#c7d6e0]'
               }`}
             >
               Original Data
@@ -56,31 +56,31 @@ export function DataComparison({ originalData, cleanedData, operations }: DataCo
             <button
               onClick={() => setShowOriginal(false)}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                !showOriginal ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  !showOriginal ? 'bg-green-600 text-white' : 'bg-[#D7DFEA] text-[#10263f] hover:bg-[#c7d6e0]'
               }`}
             >
               Cleaned Data
             </button>
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-[#10263f]">
             Showing {startIdx + 1}-{Math.min(endIdx, displayData.length)} of {displayData.length}
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-auto max-h-[50vh]">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-white border-b border-[#D7DFEA]">
               <tr>
                 {columns.map((col) => (
-                  <th key={col} className="px-4 py-3 text-left text-sm text-gray-700 whitespace-nowrap">
+                  <th key={col} className="sticky top-0 px-4 py-3 text-left text-sm text-[#10263f] whitespace-nowrap bg-white z-10">
                     {col}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-[#D7DFEA]">
               {currentRows.map((row, idx) => (
-                <tr key={idx} className="hover:bg-gray-50">
+                <tr key={idx} className="hover:bg-[#f8fbff]">
                   {columns.map((col) => (
                     <td key={col} className="px-4 py-3 text-sm whitespace-nowrap">
                       {row[col] !== null && row[col] !== undefined && row[col] !== ''
@@ -100,17 +100,17 @@ export function DataComparison({ originalData, cleanedData, operations }: DataCo
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="px-3 py-1 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#f8fbff]"
             >
               Previous
             </button>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-[#10263f]">
               Page {currentPage} of {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="px-3 py-1 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#f8fbff]"
             >
               Next
             </button>

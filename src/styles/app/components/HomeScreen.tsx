@@ -214,10 +214,10 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
             {/* Left: Get Data */}
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="p-2 rounded-lg" style={{ background: '#6D8196' }}>
+                <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
                   <FolderOpen className="w-4 h-4 text-white" />
                 </div>
-                <h2 className="text-xl font-bold" style={{ color: '#3D3D3D' }}>Get Data</h2>
+                <h2 className="text-xl font-bold" style={{ color: '#10263f' }}>Get Data</h2>
               </div>
 
               <div
@@ -236,7 +236,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                     <Upload className="h-10 w-10 text-white" />
                   </div>
                 </div>
-                <h3 className="text-lg font-bold mb-2" style={{ color: '#3D3D3D' }}>Upload Your Dataset</h3>
+                <h3 className="text-lg font-bold mb-2" style={{ color: '#10263f' }}>Upload Your Dataset</h3>
                 <p className="mb-5 text-sm" style={{ color: '#6D8196' }}>
                   Drag and drop your files here or click to browse
                 </p>
@@ -280,23 +280,23 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
               {selectedFiles.length > 0 && (
                 <div className="mt-4 bg-white rounded-xl p-4 shadow-md" style={{ border: '1px solid #d7dfea' }}>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-bold flex items-center space-x-2" style={{ color: '#3D3D3D' }}>
-                      <Layers className="w-4 h-4" style={{ color: '#6D8196' }} />
+                    <h3 className="text-sm font-bold flex items-center space-x-2" style={{ color: '#10263f' }}>
+                      <Layers className="w-4 h-4" style={{ color: '#3b82f6' }} />
                       <span>Selected Files ({selectedFiles.length})</span>
                     </h3>
                   </div>
                   <div className="space-y-2 max-h-48 overflow-auto mb-3">
                     {selectedFiles.map((file, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'rgba(109, 129, 150, 0.10)' }}>
+                  <div className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'rgba(59, 130, 246, 0.10)' }}>
                         <div className="flex items-center space-x-2 flex-1 min-w-0">
-                          <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: '#6D8196' }} />
-                          <span className="text-sm truncate" style={{ color: '#3D3D3D' }}>{file.name}</span>
-                          <span className="text-xs" style={{ color: '#6D8196' }}>({(file.size / 1024).toFixed(1)} KB)</span>
+                          <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: '#3b82f6' }} />
+                          <span className="text-sm truncate" style={{ color: '#10263f' }}>{file.name}</span>
+                          <span className="text-xs" style={{ color: '#3b82f6' }}>({(file.size / 1024).toFixed(1)} KB)</span>
                         </div>
                         <button
                           onClick={() => handleRemoveFile(idx)}
                           className="ml-2 text-xs font-semibold"
-                          style={{ color: '#6D8196' }}
+                          style={{ color: '#3b82f6' }}
                         >
                           Remove
                         </button>
@@ -306,7 +306,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                   <button
                     onClick={handleCombineAndProcess}
                     className="w-full px-4 py-2.5 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
-                    style={{ background: '#6D8196' }}
+                    style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
                   >
                     <Layers className="w-4 h-4" />
                     <span>Combine & Process {selectedFiles.length} {selectedFiles.length === 1 ? 'File' : 'Files'}</span>
@@ -332,14 +332,14 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                         <FileSpreadsheet className="w-10 h-10 text-white" />
                       </div>
                     </div>
-                    <p className="text-base font-semibold" style={{ color: '#3D3D3D' }}>No recent files</p>
-                    <p className="text-sm mt-2 flex items-center justify-center space-x-1.5" style={{ color: '#6D8196' }}>
+                    <p className="text-base font-semibold" style={{ color: '#10263f' }}>No recent files</p>
+                    <p className="text-sm mt-2 flex items-center justify-center space-x-1.5" style={{ color: '#3b82f6' }}>
                       <TrendingUp className="w-3.5 h-3.5" />
                       <span>Upload a file to get started</span>
                     </p>
                   </div>
                 ) : (
-                  <div className="divide-y divide-gray-100">
+                  <div className="divide-y" style={{ borderColor: '#d7dfea' }}>
                     {recentFiles.map((file, idx) => {
                       const fileInfo = getFileInfo(file.name);
                       return (
@@ -352,14 +352,14 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                             borderRadius: '0.5rem'
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(109, 129, 150, 0.10)';
+                            e.currentTarget.style.background = 'rgba(59, 130, 246, 0.10)';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = 'rgba(255, 255, 255, 0)';
                           }}
                         >
                           <div className="flex items-center space-x-3">
-                            <div className="p-2 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-200" style={{ background: '#6D8196' }}>
+                            <div className="p-2 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-200" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
                               {fileInfo.isCombined ? (
                                 <Layers className="w-5 h-5 text-white" />
                               ) : (
@@ -367,20 +367,20 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-sm transition-colors truncate" style={{ color: '#3D3D3D' }}>{file.name}</h4>
-                              <div className="flex items-center space-x-2 text-xs mt-1 flex-wrap" style={{ color: '#6D8196' }}>
+                              <h4 className="font-semibold text-sm transition-colors truncate" style={{ color: '#10263f' }}>{file.name}</h4>
+                              <div className="flex items-center space-x-2 text-xs mt-1 flex-wrap" style={{ color: '#3b82f6' }}>
                                 <div className="flex items-center space-x-1">
                                   <Clock className="w-3 h-3" />
                                   <span>{formatDate(file.date)}</span>
                                 </div>
                                 <span>•</span>
-                                <div className="px-2 py-0.5 rounded-md font-medium" style={{ backgroundColor: 'rgba(109, 129, 150, 0.18)', color: '#10263f' }}>
+                                <div className="px-2 py-0.5 rounded-md font-medium" style={{ backgroundColor: 'rgba(59, 130, 246, 0.18)', color: '#10263f' }}>
                                   {file.rows.toLocaleString()} rows
                                 </div>
                                 {fileInfo.isCombined && (
                                   <>
                                     <span>•</span>
-                                    <div className="px-2 py-0.5 rounded-md font-medium flex items-center space-x-1" style={{ backgroundColor: 'rgba(30, 51, 80, 0.16)', color: '#10263f' }}>
+                                    <div className="px-2 py-0.5 rounded-md font-medium flex items-center space-x-1" style={{ backgroundColor: 'rgba(59, 130, 246, 0.16)', color: '#10263f' }}>
                                       <Layers className="w-3 h-3" />
                                       <span>{fileInfo.sourceCount} files combined</span>
                                     </div>
@@ -402,33 +402,33 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D7DFEA' }}>
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-semibold uppercase" style={{ color: '#6D8196' }}>Total Analyses</div>
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196' }}></div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#3b82f6' }}>Total Analyses</div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#3b82f6' }}></div>
               </div>
-              <div className="text-4xl font-bold" style={{ color: '#3D3D3D' }}>
+              <div className="text-4xl font-bold" style={{ color: '#10263f' }}>
                 {recentFiles.length}
               </div>
-              <div className="mt-2 text-xs" style={{ color: '#6D8196' }}>Files processed</div>
+              <div className="mt-2 text-xs" style={{ color: '#3b82f6' }}>Files processed</div>
             </div>
             <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D7DFEA' }}>
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-semibold uppercase" style={{ color: '#6D8196' }}>Data Cleaned</div>
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196', animationDelay: '0.5s' }}></div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#3b82f6' }}>Data Cleaned</div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#3b82f6', animationDelay: '0.5s' }}></div>
               </div>
-              <div className="text-4xl font-bold" style={{ color: '#3D3D3D' }}>
+              <div className="text-4xl font-bold" style={{ color: '#10263f' }}>
                 {recentFiles.reduce((acc, f) => acc + f.rows, 0).toLocaleString()}
               </div>
-              <div className="mt-2 text-xs" style={{ color: '#6D8196' }}>Total rows processed</div>
+              <div className="mt-2 text-xs" style={{ color: '#3b82f6' }}>Total rows processed</div>
             </div>
             <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D7DFEA' }}>
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-semibold uppercase" style={{ color: '#6D8196' }}>Status</div>
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196', animationDelay: '1s' }}></div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#3b82f6' }}>Status</div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#3b82f6', animationDelay: '1s' }}></div>
               </div>
               <div className="flex items-center">
-                <CheckCircle className="w-8 h-8" style={{ color: '#6D8196' }} />
+                <CheckCircle className="w-8 h-8" style={{ color: '#3b82f6' }} />
               </div>
-              <div className="mt-2 text-xs" style={{ color: '#6D8196' }}>System operational</div>
+              <div className="mt-2 text-xs" style={{ color: '#3b82f6' }}>System operational</div>
             </div>
           </div>
         </div>

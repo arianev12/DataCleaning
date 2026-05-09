@@ -1,7 +1,8 @@
 /* Consistent Color Palette */
 :root {
   --primary-dark: #4A4A4A;
-  --primary-light: #CBCBCB;
+  --primary-dark: #10263f;
+  --primary-light: #D7DFEA;
   --accent-cream: #FFFFE3;
   --accent-slate: #6D8196;
 }

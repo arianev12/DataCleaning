@@ -126,7 +126,7 @@ export function DataCleaning({ data, onClean }: DataCleaningProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-white rounded-lg border border-[#D7DFEA] p-6">
         <h3 className="mb-4">Select Cleaning Operations</h3>
 
         <div className="space-y-4">
@@ -142,7 +142,7 @@ export function DataCleaning({ data, onClean }: DataCleaningProps) {
             />
             <div>
               <div>Remove Duplicate Rows</div>
-              <div className="text-sm text-gray-500">Removes exact duplicate records</div>
+              <div className="text-sm text-[#D7DFEA]">Removes exact duplicate records</div>
             </div>
           </label>
 
@@ -203,7 +203,7 @@ export function DataCleaning({ data, onClean }: DataCleaningProps) {
             />
             <div>
               <div>Remove Extra Whitespace</div>
-              <div className="text-sm text-gray-500">Trim leading and trailing spaces</div>
+              <div className="text-sm text-[#D7DFEA]">Trim leading and trailing spaces</div>
             </div>
           </label>
 
@@ -219,7 +219,7 @@ export function DataCleaning({ data, onClean }: DataCleaningProps) {
             />
             <div>
               <div>Standardize Text Case</div>
-              <div className="text-sm text-gray-500">Convert all text to lowercase</div>
+              <div className="text-sm text-[#D7DFEA]">Convert all text to lowercase</div>
             </div>
           </label>
 
@@ -235,7 +235,7 @@ export function DataCleaning({ data, onClean }: DataCleaningProps) {
             />
             <div>
               <div>Convert Data Types</div>
-              <div className="text-sm text-gray-500">Convert numeric strings to numbers</div>
+              <div className="text-sm text-[#D7DFEA]">Convert numeric strings to numbers</div>
             </div>
           </label>
         </div>

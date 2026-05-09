@@ -16,17 +16,17 @@ interface VisualizationCardProps {
 }
 
 const PRESET_COLORS = [
-  { name: 'Slate', value: '#5B6B7F' },
-  { name: 'Beige', value: '#D4D0C0' },
-  { name: 'Stone', value: '#6B6B6B' },
-  { name: 'Charcoal', value: '#3D3D3D' },
-  { name: 'Soft', value: '#F8F6F0' },
-  { name: 'Mist', value: '#E8E4D6' },
-  { name: 'Ink', value: '#232B36' },
-  { name: 'Smoke', value: '#A9A59A' },
+  { name: 'Red', value: '#ef4444' },
+  { name: 'Green', value: '#10b981' },
+  { name: 'Yellow', value: '#f59e0b' },
+  { name: 'Blue', value: '#3b82f6' },
+  { name: 'Navy', value: '#10263f' },
+  { name: 'Sky', value: '#38bdf8' },
+  { name: 'Emerald', value: '#059669' },
+  { name: 'Amber', value: '#d97706' },
 ];
 
-const PIE_COLORS = ['#5B6B7F', '#D4D0C0', '#6B6B6B', '#3D3D3D', '#E8E4D6', '#F8F6F0', '#232B36', '#A9A59A'];
+const PIE_COLORS = ['#ef4444', '#10b981', '#f59e0b', '#3b82f6', '#10263f', '#38bdf8', '#059669', '#d97706'];
 
 export function VisualizationCard({
   visualization,
@@ -168,18 +168,18 @@ export function VisualizationCard({
             fontSize: visualization.fontSize,
             color: visualization.textColor
           }}>
-            <thead className="bg-gray-50 sticky top-0">
+            <thead className="sticky top-0" style={{ background: 'linear-gradient(to right, rgba(16, 38, 63, 0.08), rgba(59, 130, 246, 0.12))', zIndex: 10 }}>
               <tr>
                 {columns.map((col) => (
-                  <th key={col} className="px-4 py-2 text-left border-b text-xs uppercase text-gray-700">{col}</th>
+                  <th key={col} className="px-4 py-2 text-left border-b text-xs uppercase whitespace-nowrap" style={{ color: '#10263f' }}>{col}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {data.map((row, idx) => (
-                <tr key={idx} className="border-b hover:bg-gray-50">
+                <tr key={idx} className="border-b hover:bg-blue-50">
                   {columns.map((col) => (
-                    <td key={col} className="px-4 py-2">{String(row[col] || '')}</td>
+                    <td key={col} className="px-4 py-2 whitespace-nowrap">{String(row[col] || '')}</td>
                   ))}
                 </tr>
               ))}
@@ -307,7 +307,7 @@ export function VisualizationCard({
           </ScatterChart>
         ) : (
           <div className="flex items-center justify-center w-full h-full">
-            <p className="text-gray-500">Unsupported chart type: {visualization.type}</p>
+            <p className="text-[#D7DFEA]">Unsupported chart type: {visualization.type}</p>
           </div>
         )}
       </ResponsiveContainer>
@@ -326,10 +326,10 @@ export function VisualizationCard({
     <div
       ref={cardRef}
       className="group bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border-2 overflow-hidden transition-all duration-300 hover:shadow-2xl relative hover:scale-[1.02]"
-      style={{ width: Math.max(visualization.width, 350), borderColor: '#D4D0C0' }}
+      style={{ width: Math.max(visualization.width, 350), borderColor: '#D7DFEA' }}
     >
       {/* Header */}
-      <div className="border-b-2 px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3" style={{ background: '#F8F6F0', borderColor: '#D4D0C0' }}>
+      <div className="border-b-2 px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
         <input
           type="text"
           value={visualization.title}
@@ -404,14 +404,14 @@ export function VisualizationCard({
 
       {/* Configuration Panel - Axes */}
       {showConfig && visualization.type !== 'table' && (
-        <div className="border-b-2 p-5" style={{ background: '#F8F6F0', borderColor: '#D4D0C0' }}>
+        <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-gray-700 text-sm mb-2">X-Axis (Category)</label>
+              <label className="block text-[#10263f] text-sm mb-2">X-Axis (Category)</label>
               <select
                 value={visualization.xAxis}
                 onChange={(e) => onUpdate({ xAxis: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 border-2 border-[#D7DFEA] rounded-lg focus:border-blue-500 outline-none"
               >
                 {columns.map((col) => (
                   <option key={col} value={col}>{col}</option>
@@ -420,11 +420,11 @@ export function VisualizationCard({
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm mb-2">Y-Axis (Value)</label>
+              <label className="block text-[#10263f] text-sm mb-2">Y-Axis (Value)</label>
               <select
                 value={visualization.yAxis}
                 onChange={(e) => onUpdate({ yAxis: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 border-2 border-[#D7DFEA] rounded-lg focus:border-blue-500 outline-none"
               >
                 {numericColumns.length > 0 ? numericColumns.map((col) => (
                   <option key={col} value={col}>{col}</option>
@@ -441,7 +441,7 @@ export function VisualizationCard({
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-all ${
                 visualization.showLegend
                   ? 'text-white border-transparent'
-                  : 'border-gray-300'
+                  : 'border-[#D7DFEA]'
               }`}
                 style={visualization.showLegend ? { background: '#6D8196' } : { color: '#3D3D3D' }}
             >
@@ -453,7 +453,7 @@ export function VisualizationCard({
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-all ${
                 visualization.showGrid
                   ? 'text-white border-transparent'
-                  : 'border-gray-300'
+                  : 'border-[#D7DFEA]'
               }`}
                 style={visualization.showGrid ? { background: '#6D8196' } : { color: '#3D3D3D' }}
             >
@@ -466,15 +466,15 @@ export function VisualizationCard({
 
       {/* Title Formatting Panel */}
       {showTitleFormatting && (
-        <div className="border-b-2 p-5" style={{ background: '#F8F6F0', borderColor: '#D4D0C0' }}>
-          <div className="text-sm mb-3 text-gray-700">Title Formatting</div>
+        <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
+          <div className="text-sm mb-3 text-[#10263f]">Title Formatting</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-gray-700 text-xs mb-1">Font Family</label>
+              <label className="block text-[#10263f] text-xs mb-1">Font Family</label>
               <select
                 value={visualization.titleFontFamily}
                 onChange={(e) => onUpdate({ titleFontFamily: e.target.value })}
-                className="w-full px-2 py-1 border-2 border-gray-300 rounded outline-none text-sm"
+                className="w-full px-2 py-1 border-2 border-[#D7DFEA] rounded outline-none text-sm"
                 style={{ color: '#3D3D3D' }}
               >
                 <option value="Arial">Arial</option>
@@ -486,7 +486,7 @@ export function VisualizationCard({
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 text-xs mb-1">Font Size: {visualization.titleFontSize}px</label>
+              <label className="block text-[#10263f] text-xs mb-1">Font Size: {visualization.titleFontSize}px</label>
               <input
                 type="range"
                 min="12"
@@ -497,12 +497,12 @@ export function VisualizationCard({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-xs mb-1">Title Color</label>
+              <label className="block text-[#10263f] text-xs mb-1">Title Color</label>
               <input
                 type="color"
                 value={visualization.titleColor}
                 onChange={(e) => onUpdate({ titleColor: e.target.value })}
-                className="w-full h-9 rounded border-2 border-gray-300 cursor-pointer"
+                className="w-full h-9 rounded border-2 border-[#D7DFEA] cursor-pointer"
               />
             </div>
             <div className="flex items-end space-x-2">
@@ -511,7 +511,7 @@ export function VisualizationCard({
                 className={`flex-1 px-3 py-2 rounded border-2 transition-all ${
                   visualization.titleBold
                     ? 'text-white border-transparent'
-                    : 'border-gray-300 hover:border-green-400'
+                    : 'border-[#D7DFEA] hover:border-green-400'
                 }`}
                   style={visualization.titleBold ? { background: '#6D8196' } : { color: '#3D3D3D' }}
               >
@@ -522,7 +522,7 @@ export function VisualizationCard({
                 className={`flex-1 px-3 py-2 rounded border-2 transition-all ${
                   visualization.titleItalic
                     ? 'text-white border-transparent'
-                    : 'border-gray-300 hover:border-green-400'
+                    : 'border-[#D7DFEA] hover:border-green-400'
                 }`}
                   style={visualization.titleItalic ? { background: '#6D8196' } : { color: '#3D3D3D' }}
               >
@@ -535,15 +535,15 @@ export function VisualizationCard({
 
       {/* Text Formatting Panel */}
       {showTextFormatting && visualization.type !== 'table' && (
-        <div className="border-b-2 p-5" style={{ background: '#F8F6F0', borderColor: '#D4D0C0' }}>
-          <div className="text-sm mb-3 text-gray-700">Chart Text Formatting</div>
+        <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
+          <div className="text-sm mb-3 text-[#10263f]">Chart Text Formatting</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-gray-700 text-xs mb-1">Font Family</label>
+              <label className="block text-[#10263f] text-xs mb-1">Font Family</label>
               <select
                 value={visualization.fontFamily}
                 onChange={(e) => onUpdate({ fontFamily: e.target.value })}
-                className="w-full px-2 py-1 border-2 border-gray-300 rounded focus:border-orange-500 outline-none text-sm"
+                className="w-full px-2 py-1 border-2 border-[#D7DFEA] rounded focus:border-orange-500 outline-none text-sm"
               >
                 <option value="Arial">Arial</option>
                 <option value="Times New Roman">Times New Roman</option>
@@ -554,7 +554,7 @@ export function VisualizationCard({
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 text-xs mb-1">Font Size: {visualization.fontSize}px</label>
+              <label className="block text-[#10263f] text-xs mb-1">Font Size: {visualization.fontSize}px</label>
               <input
                 type="range"
                 min="8"
@@ -565,12 +565,12 @@ export function VisualizationCard({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-xs mb-1">Text Color</label>
+              <label className="block text-[#10263f] text-xs mb-1">Text Color</label>
               <input
                 type="color"
                 value={visualization.textColor}
                 onChange={(e) => onUpdate({ textColor: e.target.value })}
-                className="w-full h-9 rounded border-2 border-gray-300 cursor-pointer"
+                className="w-full h-9 rounded border-2 border-[#D7DFEA] cursor-pointer"
               />
             </div>
           </div>
@@ -579,8 +579,8 @@ export function VisualizationCard({
 
       {/* Color Picker */}
       {showColorPicker && visualization.type !== 'table' && visualization.type !== 'pie' && visualization.type !== 'donut' && (
-        <div className="border-b-2 p-5" style={{ background: '#F8F6F0', borderColor: '#D4D0C0' }}>
-          <label className="block text-gray-700 text-sm mb-3">Chart Color</label>
+        <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
+          <label className="block text-[#10263f] text-sm mb-3">Chart Color</label>
           <div className="grid grid-cols-4 gap-2">
             {PRESET_COLORS.map((colorObj) => (
               <button
@@ -588,8 +588,8 @@ export function VisualizationCard({
                 onClick={() => onUpdate({ chartColor: colorObj.value })}
                 className={`p-3 rounded-lg border-2 transition-all ${
                   visualization.chartColor === colorObj.value
-                    ? 'border-gray-800 scale-110'
-                    : 'border-gray-300 hover:scale-105'
+                    ? 'border-[#10263f] scale-110'
+                    : 'border-[#D7DFEA] hover:scale-105'
                 }`}
                 style={{ backgroundColor: colorObj.value }}
                 title={colorObj.name}
@@ -601,12 +601,12 @@ export function VisualizationCard({
             ))}
           </div>
           <div className="mt-3">
-            <label className="block text-gray-700 text-xs mb-1">Custom Color</label>
+            <label className="block text-[#10263f] text-xs mb-1">Custom Color</label>
             <input
               type="color"
               value={visualization.chartColor}
               onChange={(e) => onUpdate({ chartColor: e.target.value })}
-              className="w-full h-10 rounded border-2 border-gray-300 cursor-pointer"
+              className="w-full h-10 rounded border-2 border-[#D7DFEA] cursor-pointer"
             />
           </div>
         </div>
@@ -675,24 +675,24 @@ export function VisualizationCard({
         />
       </div>
 
-      {/* Footer */}
+        {/* Footer */}
       {visualization.type !== 'table' && (
-        <div className="border-t-2 px-5 py-3 text-xs flex items-center justify-between" style={{ background: '#F8F6F0', borderColor: '#D4D0C0' }}>
+        <div className="border-t-2 px-5 py-3 text-xs flex items-center justify-between" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <div className="flex items-center space-x-2">
             <div className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg font-medium">
               {visualization.xAxis}
             </div>
-            <span className="text-gray-400">×</span>
+            <span className="text-[#D7DFEA]">×</span>
             <div className="px-2 py-1 bg-purple-100 text-purple-700 rounded-lg font-medium">
               {visualization.yAxis}
             </div>
           </div>
-          <div className="flex items-center space-x-3 text-gray-500">
+          <div className="flex items-center space-x-3 text-[#D7DFEA]">
             <span className="flex items-center space-x-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span>{chartData.length} points</span>
             </span>
-            <span className="text-gray-400">•</span>
+            <span className="text-[#D7DFEA]">•</span>
             <span>{visualization.width}×{visualization.height}px</span>
           </div>
         </div>
@@ -700,5 +700,8 @@ export function VisualizationCard({
     </div>
   );
 }
+
+
+
 
 

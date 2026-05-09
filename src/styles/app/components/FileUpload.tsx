@@ -70,15 +70,15 @@ export function FileUpload({ onDataLoaded }: FileUploadProps) {
     <div className="w-full max-w-2xl mx-auto">
       <div
         className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-          isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+          isDragging ? 'border-blue-500 bg-blue-50' : 'border-[#D7DFEA] hover:border-[#10263f]'
         }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
-        <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 className="mb-2 text-gray-700">Drop your file here or click to browse</h3>
-        <p className="text-gray-500 mb-4">Supported formats: CSV, Excel (.xlsx, .xls)</p>
+        <Upload className="mx-auto h-12 w-12 text-[#D7DFEA] mb-4" />
+        <h3 className="mb-2 text-[#10263f]">Drop your file here or click to browse</h3>
+        <p className="text-[#D7DFEA] mb-4">Supported formats: CSV, Excel (.xlsx, .xls)</p>
         <input
           type="file"
           accept=".csv,.xlsx,.xls"

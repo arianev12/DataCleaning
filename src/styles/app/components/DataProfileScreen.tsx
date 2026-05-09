@@ -1,6 +1,5 @@
 import { useRef } from 'react';
-import { ArrowRight, Home, Hash, Type, Calendar, AlertCircle, Download, FileSpreadsheet, Table, Columns, CheckCircle, TrendingUp } from 'lucide-react';
-import { toPng } from 'html-to-image';
+import { ArrowRight, Home, Hash, Type, Calendar, AlertCircle, FileSpreadsheet, Table, Columns, CheckCircle, TrendingUp } from 'lucide-react';
 
 interface DataProfileScreenProps {
   data: any[];
@@ -12,47 +11,6 @@ interface DataProfileScreenProps {
 export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHome }: DataProfileScreenProps) {
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const handleDownloadCSV = () => {
-    if (data.length === 0) return;
-
-    const headers = Object.keys(data[0]);
-    const csvContent = [
-      headers.join(','),
-      ...data.map(row =>
-        headers.map(header => {
-          const value = row[header];
-          const stringValue = String(value ?? '');
-          return stringValue.includes(',') ? `"${stringValue}"` : stringValue;
-        }).join(',')
-      )
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${fileName.replace(/\.[^/.]+$/, '')}_original_${Date.now()}.csv`;
-    link.click();
-  };
-
-  const handleDownloadProfile = async () => {
-    if (!profileRef.current) return;
-
-    try {
-      const dataUrl = await toPng(profileRef.current, {
-        quality: 0.95,
-        pixelRatio: 2,
-        backgroundColor: '#ffffff'
-      });
-
-      const link = document.createElement('a');
-      link.download = `Profile_${fileName.replace(/\.[^/.]+$/, '')}_${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error('Error downloading profile:', error);
-      alert('Unable to export profile. Please try again.');
-    }
-  };
   const columns = Object.keys(data[0] || {});
   const rowCount = data.length;
   const columnCount = columns.length;
@@ -112,12 +70,12 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
   return (
     <div className="h-screen flex flex-col" style={{ background: '#f4f6fb' }}>
       {/* Header */}
-      <div className="text-white px-6 py-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)' }}>
+      <div className="text-white px-6 py-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-1 flex items-center space-x-2">
-              <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
-                <Hash className="w-5 h-5" />
+              <div className="p-2 rounded-lg bg-white/20">
+                <Hash className="w-5 h-5 text-white" />
               </div>
               <span>Data Profile</span>
             </h1>
@@ -129,31 +87,17 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
           <div className="flex space-x-3">
             <button
               onClick={onBackToHome}
-              className="px-5 py-2.5 bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/30 hover:border-white/50 hover:shadow-md font-medium flex items-center space-x-2 transition-all duration-200 hover:scale-105"
+              className="px-5 py-2.5 bg-white/12 backdrop-blur-sm border-2 rounded-xl text-sm font-medium flex items-center space-x-2 transition-all duration-200 hover:bg-white/25 hover:scale-105"
+              style={{ borderColor: 'rgba(215,223,234,0.18)' }}
             >
-              <Home className="w-4 h-4" />
-              <span>Home</span>
+              <Home className="w-4 h-4" style={{ color: '#10263f' }} />
+              <span style={{ color: '#10263f' }}>Home</span>
             </button>
-            <button
-              onClick={handleDownloadCSV}
-              className="px-5 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#6D8196' }}
-            >
-              <Download className="w-4 h-4" />
-              <span>Export CSV</span>
-            </button>
-            <button
-              onClick={handleDownloadProfile}
-              className="px-5 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#6D8196' }}
-            >
-              <Download className="w-4 h-4" />
-              <span>Export Profile</span>
-            </button>
+
             <button
               onClick={onStartCleaning}
               className="px-6 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#6D8196' }}
+              style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
             >
               <span>Start Cleaning</span>
               <ArrowRight className="w-4 h-4" />
@@ -225,15 +169,15 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
               </h2>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="min-w-max w-full">
                 <thead className="border-b-2" style={{ background: 'linear-gradient(to right, rgba(59, 130, 246, 0.08), rgba(215, 223, 234, 0.25))', borderColor: '#d7dfea' }}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>Column Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>Data Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>Non-Null</th>
-                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>Missing</th>
-                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>Unique</th>
-                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>Statistics</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>Column Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>Data Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>Non-Null</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>Missing</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>Unique</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>Statistics</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y" style={{ borderColor: '#d7dfea' }}>
@@ -249,13 +193,13 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
                       onMouseLeave={(e) => {
                         e.currentTarget.style.background = '';
                       }}>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
                           <div className="flex items-center space-x-2">
                             {getTypeIcon(profile.dataType)}
                             <span className="font-semibold" style={{ color: '#10263f' }}>{column}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
                           <span className="px-3 py-1.5 rounded-full text-xs font-semibold border" style={{
                             backgroundColor: profile.dataType === 'number' ? 'rgba(109, 129, 150, 0.15)' :
                                            profile.dataType === 'date' ? 'rgba(203, 203, 203, 0.3)' : '#FFFFE3',
@@ -265,10 +209,10 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
                             {profile.dataType}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
                           <span className="font-semibold" style={{ color: '#10263f' }}>{profile.nonNullCount.toLocaleString()}</span>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
                           {profile.missingCount > 0 ? (
                             <div className="flex items-center space-x-2">
                               <div className="p-1 rounded" style={{ backgroundColor: 'rgba(203, 203, 203, 0.3)' }}>
@@ -285,12 +229,12 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
                           <span className="px-3 py-1 rounded-lg text-sm font-semibold" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#5b6b7f' }}>
                             {profile.uniqueCount.toLocaleString()}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap align-top">
                           {profile.dataType === 'number' && (
                             <div className="text-xs space-y-0.5" style={{ color: '#5b6b7f' }}>
                               <div className="flex items-center space-x-1">
@@ -325,21 +269,21 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
             <div className="px-6 py-4 border-b-2" style={{ background: 'linear-gradient(to right, rgba(59, 130, 246, 0.08), rgba(215, 223, 234, 0.35))', borderColor: '#d7dfea' }}>
               <h2 className="text-lg font-bold flex items-center space-x-2" style={{ color: '#10263f' }}>
                 <FileSpreadsheet className="w-5 h-5" style={{ color: '#5b6b7f' }} />
-                <span>Data Preview (First 10 rows)</span>
+                <span>Data Preview</span>
               </h2>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b-2" style={{ background: 'linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(215, 223, 234, 0.2))', borderColor: '#d7dfea' }}>
+            <div className="overflow-x-auto" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+              <table className="min-w-max w-full text-sm">
+                <thead className="border-b-2 sticky top-0 z-20" style={{ background: 'linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(215, 223, 234, 0.2))', borderColor: '#d7dfea' }}>
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide sticky left-0" style={{ color: '#10263f', backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>#</th>
+                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky left-0 z-10" style={{ color: '#10263f', backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>#</th>
                     {columns.map((col) => (
-                      <th key={col} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide" style={{ color: '#10263f' }}>{col}</th>
+                      <th key={col} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap" style={{ color: '#10263f' }}>{col}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y" style={{ borderColor: '#d7dfea' }}>
-                  {data.slice(0, 10).map((row, idx) => (
+                  {data.map((row, idx) => (
                       <tr key={idx} className="transition-colors duration-200"
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background = 'linear-gradient(to right, rgba(59, 130, 246, 0.08), rgba(215, 223, 234, 0.25))';
@@ -347,7 +291,7 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
                       onMouseLeave={(e) => {
                         e.currentTarget.style.background = '';
                       }}>
-                      <td className="px-4 py-3 font-bold sticky left-0 bg-white" style={{ color: '#5b6b7f' }}>{idx + 1}</td>
+                      <td className="px-4 py-3 font-bold whitespace-nowrap sticky left-0 bg-white z-10" style={{ color: '#5b6b7f' }}>{idx + 1}</td>
                       {columns.map((col) => {
                         const value = row[col];
                         const isEmpty = value === null || value === undefined || value === '';
@@ -372,3 +316,7 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
     </div>
   );
 }
+
+
+
+

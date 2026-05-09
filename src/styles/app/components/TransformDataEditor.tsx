@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Undo, Trash2, Type, Hash, Calendar, Home } from 'lucide-react';
+import { Check, Undo, Trash2, Type, Hash, Calendar, Home, FileSpreadsheet } from 'lucide-react';
 
 interface TransformStep {
   name: string;
@@ -162,23 +162,32 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
   return (
     <div className="h-screen flex flex-col" style={{ background: '#E8E4D6' }}>
       {/* Header */}
-      <div className="text-white px-6 py-3 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
+      <div className="text-white px-6 py-4 flex items-center justify-between shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
         <div>
-          <h1 className="text-lg">Power Query Editor</h1>
-          <div className="text-sm" style={{ color: '#FFFFE3' }}>{fileName}</div>
+          <h1 className="text-2xl font-bold mb-1 flex items-center space-x-2">
+            <div className="p-2 rounded-lg bg-white/20">
+              <Type className="w-5 h-5 text-white" />
+            </div>
+            <span>Power Query Editor</span>
+          </h1>
+          <p className="text-sm ml-8 flex items-center space-x-1.5" style={{ color: '#FFFFE3' }}>
+            <FileSpreadsheet className="w-4 h-4" />
+            <span>{fileName}</span>
+          </p>
         </div>
         <div className="flex space-x-3">
           <button
             onClick={onBackToHome}
-            className="px-4 py-2 border-2 border-white/30 rounded hover:bg-white/20 flex items-center space-x-2"
+            className="px-5 py-2.5 bg-white/12 backdrop-blur-sm border-2 rounded-xl text-sm font-medium flex items-center space-x-2 transition-all duration-200 hover:bg-white/25 hover:scale-105"
+            style={{ borderColor: 'rgba(215,223,234,0.18)' }}
           >
-            <Home className="w-4 h-4" />
-            <span>Home</span>
+            <Home className="w-4 h-4" style={{ color: '#10263f' }} />
+            <span style={{ color: '#10263f' }}>Home</span>
           </button>
           <button
             onClick={() => onCloseAndApply(currentData)}
-            className="px-6 py-2 rounded flex items-center space-x-2"
-            style={{ background: '#6D8196' }}
+            className="px-6 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+            style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
           >
             <Check className="w-4 h-4" />
             <span>Close & Apply</span>

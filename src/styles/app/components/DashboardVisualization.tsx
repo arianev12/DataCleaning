@@ -5,11 +5,11 @@ interface DashboardVisualizationProps {
   data: any[];
 }
 
-const COLORS = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#06b6d4'];
+const COLORS = ['#3b82f6', '#5b6b7f', '#64748b', '#0f172a', '#1e3350', '#123a5a', '#4a6fa5', '#5b6b7f'];
 
 export function DashboardVisualization({ data }: DashboardVisualizationProps) {
   if (!data || data.length === 0) {
-    return <div className="text-gray-500">No data available for visualization</div>;
+    return <div className="text-[#D7DFEA]">No data available for visualization</div>;
   }
 
   const columns = Object.keys(data[0]);
@@ -97,7 +97,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-white rounded-lg border border-[#D7DFEA] p-6">
         <h3 className="mb-4">Chart Configuration</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -106,7 +106,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
             <select
               value={chartType}
               onChange={(e) => setChartType(e.target.value as any)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-3 py-2 border border-[#D7DFEA] rounded-lg"
             >
               <option value="bar">Bar Chart</option>
               <option value="line">Line Chart</option>
@@ -119,7 +119,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
             <select
               value={selectedXAxis}
               onChange={(e) => setSelectedXAxis(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-3 py-2 border border-[#D7DFEA] rounded-lg"
             >
               {columns.map(col => (
                 <option key={col} value={col}>{col}</option>
@@ -132,7 +132,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
             <select
               value={selectedYAxis}
               onChange={(e) => setSelectedYAxis(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-3 py-2 border border-[#D7DFEA] rounded-lg"
             >
               {numericColumns.length > 0 ? numericColumns.map(col => (
                 <option key={col} value={col}>{col}</option>
@@ -140,6 +140,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
                 <option key={col} value={col}>{col}</option>
               ))}
             </select>
+          </div>
           </div>
         </div>
 
@@ -196,9 +197,9 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-[#D7DFEA] p-6">
           <div className="h-64">
-            <div className="text-sm text-gray-600 mb-2">Distribution Overview</div>
+            <div className="text-sm text-[#10263f] mb-2">Distribution Overview</div>
             <ResponsiveContainer width="100%" height="100%" key={`mini-bar-${selectedXAxis}-${selectedYAxis}`}>
               <BarChart data={chartData.slice(0, 5)}>
                 <XAxis dataKey="name" />
@@ -210,23 +211,23 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-[#D7DFEA] p-6">
           <div className="h-64">
-            <div className="text-sm text-gray-600 mb-2">Trend Analysis</div>
+            <div className="text-sm text-[#10263f] mb-2">Trend Analysis</div>
             <ResponsiveContainer width="100%" height="100%" key={`mini-line-${selectedXAxis}-${selectedYAxis}`}>
               <LineChart data={chartData.slice(0, 10)}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#ef4444" strokeWidth={2} />
+                <Line type="monotone" dataKey="value" stroke="#5b6b7f" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-[#D7DFEA] p-6">
           <div className="h-64">
-            <div className="text-sm text-gray-600 mb-2">Proportional View</div>
+            <div className="text-sm text-[#10263f] mb-2">Proportional View</div>
             <ResponsiveContainer width="100%" height="100%" key={`mini-pie-${selectedXAxis}-${selectedYAxis}`}>
               <PieChart>
                 <Pie

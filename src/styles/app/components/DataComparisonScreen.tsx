@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { ArrowRight, ArrowLeft, Home, TrendingUp, TrendingDown, Download } from 'lucide-react';
-import { toPng } from 'html-to-image';
 
 interface DataComparisonScreenProps {
   originalData: any[];
@@ -44,26 +43,6 @@ export function DataComparisonScreen({
     link.click();
   };
 
-  const handleDownloadComparison = async () => {
-    if (!comparisonRef.current) return;
-
-    try {
-      const dataUrl = await toPng(comparisonRef.current, {
-        quality: 0.95,
-        pixelRatio: 2,
-        backgroundColor: '#ffffff'
-      });
-
-      const link = document.createElement('a');
-      link.download = `Comparison_${fileName.replace(/\.[^/.]+$/, '')}_${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error('Error downloading comparison:', error);
-      alert('Unable to export comparison. Please try again.');
-    }
-  };
-
   const columns = originalData.length > 0 ? Object.keys(originalData[0]) : [];
   const rowsRemoved = originalData.length - cleanedData.length;
   const dataQualityImprovement = () => {
@@ -90,12 +69,12 @@ export function DataComparisonScreen({
   return (
     <div className="h-screen flex flex-col" style={{ background: '#f4f6fb' }}>
       {/* Header */}
-      <div className="text-white px-6 py-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)' }}>
+      <div className="text-white px-6 py-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-1 flex items-center space-x-2">
-              <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded-lg">
-                <TrendingUp className="w-5 h-5" />
+              <div className="p-2 rounded-lg bg-white/20">
+                <TrendingUp className="w-5 h-5 text-white" />
               </div>
               <span>Data Comparison</span>
             </h1>
@@ -104,38 +83,32 @@ export function DataComparisonScreen({
           <div className="flex space-x-3">
             <button
               onClick={onBackToHome}
-              className="px-5 py-2.5 bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/30 hover:border-white/50 hover:shadow-md font-medium flex items-center space-x-2 transition-all duration-200 hover:scale-105"
+              className="px-5 py-2.5 bg-white/12 backdrop-blur-sm border-2 rounded-xl text-sm font-medium flex items-center space-x-2 transition-all duration-200 hover:bg-white/25 hover:scale-105"
+              style={{ borderColor: 'rgba(215,223,234,0.18)' }}
             >
-              <Home className="w-4 h-4" />
-              <span>Home</span>
+              <Home className="w-4 h-4" style={{ color: '#10263f' }} />
+              <span style={{ color: '#10263f' }}>Home</span>
             </button>
             <button
               onClick={onBackToTransform}
-              className="px-5 py-2.5 bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/30 hover:border-white/50 hover:shadow-md font-medium flex items-center space-x-2 transition-all duration-200 hover:scale-105"
+              className="px-5 py-2.5 bg-white/12 backdrop-blur-sm border-2 rounded-xl text-sm font-medium flex items-center space-x-2 transition-all duration-200 hover:bg-white/25 hover:scale-105"
+              style={{ borderColor: 'rgba(215,223,234,0.18)' }}
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back</span>
+              <ArrowLeft className="w-4 h-4" style={{ color: '#10263f' }} />
+              <span style={{ color: '#10263f' }}>Back</span>
             </button>
             <button
               onClick={handleDownloadCleanedCSV}
               className="px-5 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#3b82f6' }}
+              style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
             >
               <Download className="w-4 h-4" />
               <span>Export CSV</span>
             </button>
             <button
-              onClick={handleDownloadComparison}
-              className="px-5 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: 'linear-gradient(to right, #6D8196, #4A4A4A)' }}
-            >
-              <Download className="w-4 h-4" />
-              <span>Export Image</span>
-            </button>
-            <button
               onClick={onViewInsights}
               className="px-6 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: 'linear-gradient(to right, #6D8196, #4A4A4A)' }}
+              style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
             >
               <span>View Insights</span>
               <ArrowRight className="w-4 h-4" />
