@@ -119,7 +119,7 @@ export function DataComparisonScreen({
             <button
               onClick={handleDownloadCleanedCSV}
               className="px-5 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#5B6B7F' }}
+              style={{ background: '#3b82f6' }}
             >
               <Download className="w-4 h-4" />
               <span>Export CSV</span>
@@ -148,45 +148,45 @@ export function DataComparisonScreen({
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Impact Summary */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6" style={{ border: '1px solid #d7dfea' }}>
               <div className="text-sm mb-1" style={{ color: '#6D8196' }}>Original Rows</div>
-              <div className="text-3xl" style={{ color: '#4A4A4A' }}>{originalData.length.toLocaleString()}</div>
+              <div className="text-3xl" style={{ color: '#10263f' }}>{originalData.length.toLocaleString()}</div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6" style={{ border: '1px solid #d7dfea' }}>
               <div className="text-sm mb-1" style={{ color: '#6D8196' }}>Cleaned Rows</div>
-              <div className="text-3xl" style={{ color: '#6D8196' }}>{cleanedData.length.toLocaleString()}</div>
+              <div className="text-3xl" style={{ color: '#3b82f6' }}>{cleanedData.length.toLocaleString()}</div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6" style={{ border: '1px solid #d7dfea' }}>
               <div className="text-sm mb-1" style={{ color: '#6D8196' }}>Rows Removed</div>
               <div className="flex items-center space-x-2">
                 {rowsRemoved > 0 ? (
                   <>
-                    <TrendingDown className="w-6 h-6" style={{ color: '#4A4A4A' }} />
-                    <div className="text-3xl" style={{ color: '#4A4A4A' }}>{rowsRemoved}</div>
+                    <TrendingDown className="w-6 h-6" style={{ color: '#ef4444' }} />
+                    <div className="text-3xl" style={{ color: '#ef4444' }}>{rowsRemoved}</div>
                   </>
                 ) : (
                   <div className="text-3xl" style={{ color: '#6D8196' }}>0</div>
                 )}
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6" style={{ border: '1px solid #d7dfea' }}>
               <div className="text-sm mb-1" style={{ color: '#6D8196' }}>Quality Improvement</div>
               <div className="flex items-center space-x-2">
-                <TrendingUp className="w-6 h-6" style={{ color: '#6D8196' }} />
-                <div className="text-3xl" style={{ color: '#6D8196' }}>+{dataQualityImprovement()}%</div>
+                <TrendingUp className="w-6 h-6" style={{ color: '#10b981' }} />
+                <div className="text-3xl" style={{ color: '#10b981' }}>+{dataQualityImprovement()}%</div>
               </div>
             </div>
           </div>
 
           {/* View Mode Selector */}
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-4" style={{ border: '1px solid #d7dfea' }}>
             <div className="flex space-x-2">
               <button
                 onClick={() => setViewMode('side-by-side')}
                 className="px-4 py-2 rounded-lg transition-all"
                 style={{
-                  background: viewMode === 'side-by-side' ? 'linear-gradient(to right, #6D8196, #4A4A4A)' : '#CBCBCB',
-                  color: viewMode === 'side-by-side' ? 'white' : '#4A4A4A'
+                  background: viewMode === 'side-by-side' ? 'linear-gradient(135deg, #3b82f6 0%, #1e3350 100%)' : '#d7dfea',
+                  color: viewMode === 'side-by-side' ? 'white' : '#10263f'
                 }}
               >
                 Side-by-Side
@@ -195,8 +195,8 @@ export function DataComparisonScreen({
                 onClick={() => setViewMode('original')}
                 className="px-4 py-2 rounded-lg transition-all"
                 style={{
-                  background: viewMode === 'original' ? 'linear-gradient(to right, #6D8196, #4A4A4A)' : '#CBCBCB',
-                  color: viewMode === 'original' ? 'white' : '#4A4A4A'
+                  background: viewMode === 'original' ? 'linear-gradient(135deg, #3b82f6 0%, #1e3350 100%)' : '#d7dfea',
+                  color: viewMode === 'original' ? 'white' : '#10263f'
                 }}
               >
                 Original Only
@@ -205,8 +205,8 @@ export function DataComparisonScreen({
                 onClick={() => setViewMode('cleaned')}
                 className="px-4 py-2 rounded-lg transition-all"
                 style={{
-                  background: viewMode === 'cleaned' ? 'linear-gradient(to right, #6D8196, #4A4A4A)' : '#CBCBCB',
-                  color: viewMode === 'cleaned' ? 'white' : '#4A4A4A'
+                  background: viewMode === 'cleaned' ? 'linear-gradient(135deg, #3b82f6 0%, #1e3350 100%)' : '#d7dfea',
+                  color: viewMode === 'cleaned' ? 'white' : '#10263f'
                 }}
               >
                 Cleaned Only
@@ -217,24 +217,24 @@ export function DataComparisonScreen({
           {/* Data Comparison Tables */}
           {viewMode === 'side-by-side' ? (
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b" style={{ background: 'rgba(203, 203, 203, 0.3)', borderColor: '#CBCBCB' }}>
-                  <h3 className="text-lg" style={{ color: '#4A4A4A' }}>Original Data</h3>
+              <div className="bg-white rounded-lg shadow overflow-hidden" style={{ border: '1px solid #d7dfea' }}>
+                <div className="px-6 py-4 border-b" style={{ background: 'linear-gradient(to right, rgba(59, 130, 246, 0.08), rgba(215, 223, 234, 0.35))', borderColor: '#d7dfea' }}>
+                  <h3 className="text-lg" style={{ color: '#10263f' }}>Original Data</h3>
                 </div>
                 <div className="overflow-auto max-h-96">
                   <table className="w-full text-sm">
-                    <thead className="sticky top-0" style={{ backgroundColor: 'rgba(203, 203, 203, 0.1)' }}>
+                    <thead className="sticky top-0" style={{ backgroundColor: 'rgba(215, 223, 234, 0.25)' }}>
                       <tr>
                         {columns.map(col => (
-                          <th key={col} className="px-4 py-2 text-left border-b" style={{ color: '#4A4A4A', borderColor: '#CBCBCB' }}>{col}</th>
+                          <th key={col} className="px-4 py-2 text-left border-b" style={{ color: '#10263f', borderColor: '#d7dfea' }}>{col}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {originalData.slice(0, 20).map((row, idx) => (
-                        <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#CBCBCB' }}
+                        <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#d7dfea' }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 227, 0.2)';
+                            e.currentTarget.style.background = 'rgba(59, 130, 246, 0.08)';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = '';
@@ -245,9 +245,9 @@ export function DataComparisonScreen({
                             return (
                               <td key={col} className="px-4 py-2">
                                 {isEmpty ? (
-                                  <span className="italic px-1" style={{ color: '#4A4A4A', backgroundColor: 'rgba(203, 203, 203, 0.3)' }}>null</span>
+                                  <span className="italic px-1" style={{ color: '#10263f', backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>null</span>
                                 ) : (
-                                  <span style={{ color: '#4A4A4A' }}>{String(value)}</span>
+                                  <span style={{ color: '#10263f' }}>{String(value)}</span>
                                 )}
                               </td>
                             );
@@ -259,30 +259,30 @@ export function DataComparisonScreen({
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b" style={{ background: 'rgba(109, 129, 150, 0.15)', borderColor: '#CBCBCB' }}>
-                  <h3 className="text-lg" style={{ color: '#4A4A4A' }}>Cleaned Data</h3>
+              <div className="bg-white rounded-lg shadow overflow-hidden" style={{ border: '1px solid #d7dfea' }}>
+                <div className="px-6 py-4 border-b" style={{ background: 'linear-gradient(to right, rgba(59, 130, 246, 0.08), rgba(215, 223, 234, 0.3))', borderColor: '#d7dfea' }}>
+                  <h3 className="text-lg" style={{ color: '#10263f' }}>Cleaned Data</h3>
                 </div>
                 <div className="overflow-auto max-h-96">
                   <table className="w-full text-sm">
-                    <thead className="sticky top-0" style={{ backgroundColor: 'rgba(203, 203, 203, 0.1)' }}>
+                    <thead className="sticky top-0" style={{ backgroundColor: 'rgba(215, 223, 234, 0.25)' }}>
                       <tr>
                         {columns.map(col => (
-                          <th key={col} className="px-4 py-2 text-left border-b" style={{ color: '#4A4A4A', borderColor: '#CBCBCB' }}>{col}</th>
+                          <th key={col} className="px-4 py-2 text-left border-b" style={{ color: '#10263f', borderColor: '#d7dfea' }}>{col}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {cleanedData.slice(0, 20).map((row, idx) => (
-                        <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#CBCBCB' }}
+                        <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#d7dfea' }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 227, 0.2)';
+                            e.currentTarget.style.background = 'rgba(59, 130, 246, 0.08)';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = '';
                           }}>
                           {columns.map(col => (
-                            <td key={col} className="px-4 py-2" style={{ color: '#4A4A4A' }}>
+                            <td key={col} className="px-4 py-2" style={{ color: '#10263f' }}>
                               {String(row[col] || '')}
                             </td>
                           ))}
@@ -294,10 +294,10 @@ export function DataComparisonScreen({
               </div>
             </div>
           ) : (
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-white rounded-lg shadow overflow-hidden" style={{ border: '1px solid #d7dfea' }}>
               <div className={`px-6 py-4 border-b`} style={{
-                background: viewMode === 'original' ? 'rgba(203, 203, 203, 0.3)' : 'rgba(109, 129, 150, 0.15)',
-                borderColor: '#CBCBCB'
+                background: viewMode === 'original' ? 'rgba(215, 223, 234, 0.4)' : 'rgba(109, 129, 150, 0.15)',
+                borderColor: '#d7dfea'
               }}>
                 <h3 className="text-lg" style={{ color: '#4A4A4A' }}>
                   {viewMode === 'original' ? 'Original Data' : 'Cleaned Data'}
@@ -305,18 +305,18 @@ export function DataComparisonScreen({
               </div>
               <div className="overflow-auto max-h-96">
                 <table className="w-full text-sm">
-                  <thead className="sticky top-0" style={{ backgroundColor: 'rgba(203, 203, 203, 0.1)' }}>
+                  <thead className="sticky top-0" style={{ backgroundColor: 'rgba(215, 223, 234, 0.25)' }}>
                     <tr>
                       {columns.map(col => (
-                        <th key={col} className="px-4 py-2 text-left border-b" style={{ color: '#4A4A4A', borderColor: '#CBCBCB' }}>{col}</th>
+                        <th key={col} className="px-4 py-2 text-left border-b" style={{ color: '#10263f', borderColor: '#d7dfea' }}>{col}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {(viewMode === 'original' ? originalData : cleanedData).slice(0, 50).map((row, idx) => (
-                      <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#CBCBCB' }}
+                      <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#d7dfea' }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'rgba(255, 255, 227, 0.2)';
+                          e.currentTarget.style.background = 'rgba(59, 130, 246, 0.08)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = '';
@@ -327,9 +327,9 @@ export function DataComparisonScreen({
                           return (
                             <td key={col} className="px-4 py-2">
                               {isEmpty && viewMode === 'original' ? (
-                                <span className="italic px-1" style={{ color: '#4A4A4A', backgroundColor: 'rgba(203, 203, 203, 0.3)' }}>null</span>
+                                <span className="italic px-1" style={{ color: '#10263f', backgroundColor: 'rgba(215, 223, 234, 0.45)' }}>null</span>
                               ) : (
-                                <span style={{ color: '#4A4A4A' }}>{String(value || '')}</span>
+                                <span style={{ color: '#10263f' }}>{String(value || '')}</span>
                               )}
                             </td>
                           );

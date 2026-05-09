@@ -5,7 +5,7 @@ interface DashboardVisualizationProps {
   data: any[];
 }
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
+const COLORS = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#06b6d4'];
 
 export function DashboardVisualization({ data }: DashboardVisualizationProps) {
   if (!data || data.length === 0) {
@@ -204,7 +204,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" fill="#10b981" />
+                <Bar dataKey="value" fill="#3b82f6" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -218,7 +218,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#f59e0b" strokeWidth={2} />
+                <Line type="monotone" dataKey="value" stroke="#ef4444" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>

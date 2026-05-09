@@ -346,7 +346,7 @@ export function VisualizationCard({
                 ? 'text-white shadow-lg'
                 : 'bg-white/50 hover:bg-white'
               }
-              style={showConfig ? { background: '#5B6B7F' } : { color: '#6B6B6B' }}
+              style={showConfig ? { background: '#6D8196' } : { color: '#6B6B6B' }}
             }`}
             title="Configure Axes"
           >
@@ -359,7 +359,7 @@ export function VisualizationCard({
                 ? 'text-white shadow-lg'
                 : 'bg-white/50 hover:bg-white'
               }
-              style={showTitleFormatting ? { background: '#5B6B7F' } : { color: '#6B6B6B' }}
+              style={showTitleFormatting ? { background: '#6D8196' } : { color: '#6B6B6B' }}
             }`}
             title="Title Formatting"
           >
@@ -372,7 +372,7 @@ export function VisualizationCard({
                 ? 'text-white shadow-lg'
                 : 'bg-white/50 hover:bg-white'
               }
-              style={showTextFormatting ? { background: '#5B6B7F' } : { color: '#6B6B6B' }}
+              style={showTextFormatting ? { background: '#6D8196' } : { color: '#6B6B6B' }}
             }`}
             title="Text Formatting"
           >
@@ -385,7 +385,7 @@ export function VisualizationCard({
                 ? 'text-white shadow-lg'
                 : 'bg-white/50 hover:bg-white'
               }
-              style={showColorPicker ? { background: '#5B6B7F' } : { color: '#6B6B6B' }}
+              style={showColorPicker ? { background: '#6D8196' } : { color: '#6B6B6B' }}
             }`}
             title="Chart Color"
           >
@@ -443,7 +443,7 @@ export function VisualizationCard({
                   ? 'text-white border-transparent'
                   : 'border-gray-300'
               }`}
-                style={visualization.showLegend ? { background: '#5B6B7F' } : { color: '#3D3D3D' }}
+                style={visualization.showLegend ? { background: '#6D8196' } : { color: '#3D3D3D' }}
             >
               {visualization.showLegend ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
               <span>Legend</span>
@@ -455,7 +455,7 @@ export function VisualizationCard({
                   ? 'text-white border-transparent'
                   : 'border-gray-300'
               }`}
-                style={visualization.showGrid ? { background: '#5B6B7F' } : { color: '#3D3D3D' }}
+                style={visualization.showGrid ? { background: '#6D8196' } : { color: '#3D3D3D' }}
             >
               <Grid3x3 className="w-4 h-4" />
               <span>Grid</span>
@@ -513,7 +513,7 @@ export function VisualizationCard({
                     ? 'text-white border-transparent'
                     : 'border-gray-300 hover:border-green-400'
                 }`}
-                  style={visualization.titleBold ? { background: '#5B6B7F' } : { color: '#3D3D3D' }}
+                  style={visualization.titleBold ? { background: '#6D8196' } : { color: '#3D3D3D' }}
               >
                 <strong>B</strong>
               </button>
@@ -524,7 +524,7 @@ export function VisualizationCard({
                     ? 'text-white border-transparent'
                     : 'border-gray-300 hover:border-green-400'
                 }`}
-                  style={visualization.titleItalic ? { background: '#5B6B7F' } : { color: '#3D3D3D' }}
+                  style={visualization.titleItalic ? { background: '#6D8196' } : { color: '#3D3D3D' }}
               >
                 <em>I</em>
               </button>
@@ -620,56 +620,56 @@ export function VisualizationCard({
         {/* Bottom-Right Corner */}
         <div
           className="absolute bottom-0 right-0 w-5 h-5 cursor-nwse-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('both', e)}
           title="Resize"
         />
         {/* Bottom-Left Corner */}
         <div
           className="absolute bottom-0 left-0 w-5 h-5 cursor-nesw-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('both', e)}
           title="Resize"
         />
         {/* Top-Right Corner */}
         <div
           className="absolute top-0 right-0 w-5 h-5 cursor-nesw-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('both', e)}
           title="Resize"
         />
         {/* Top-Left Corner */}
         <div
           className="absolute top-0 left-0 w-5 h-5 cursor-nwse-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('both', e)}
           title="Resize"
         />
         {/* Bottom Edge */}
         <div
           className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-3 cursor-ns-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:h-4 rounded-t-lg transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('height', e)}
           title="Resize height"
         />
         {/* Top Edge */}
         <div
           className="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-3 cursor-ns-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:h-4 rounded-b-lg transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('height', e)}
           title="Resize height"
         />
         {/* Right Edge */}
         <div
           className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-16 cursor-ew-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:w-4 rounded-l-lg transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('width', e)}
           title="Resize width"
         />
         {/* Left Edge */}
         <div
           className="absolute left-0 top-1/2 transform -translate-y-1/2 w-3 h-16 cursor-ew-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:w-4 rounded-r-lg transition-all duration-200"
-          style={{ background: '#5B6B7F' }}
+          style={{ background: '#6D8196' }}
           onMouseDown={(e) => startResize('width', e)}
           title="Resize width"
         />
@@ -700,3 +700,5 @@ export function VisualizationCard({
     </div>
   );
 }
+
+

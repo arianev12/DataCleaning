@@ -242,7 +242,7 @@ export function DataCleaning({ data, onClean }: DataCleaningProps) {
 
         <button
           onClick={handleClean}
-          className="mt-6 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+          className="mt-6 px-6 py-3 text-white rounded-lg hover:shadow-lg transition-all flex items-center space-x-2" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1e3350 100%)' }}
         >
           <Check className="w-4 h-4" />
           <span>Apply Cleaning Operations</span>

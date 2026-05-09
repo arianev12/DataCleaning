@@ -192,16 +192,16 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
   return (
     <div className="min-h-screen" style={{ background: 'radial-gradient(circle at top left, rgba(242, 200, 17, 0.12), transparent 28%), radial-gradient(circle at right top, rgba(18, 58, 90, 0.12), transparent 26%), #f4f6fb' }}>
       {/* Header */}
-      <div className="text-white px-6 py-8 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)' }}>
+      <div className="text-white px-6 py-8 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="p-2 bg-white/20 rounded-lg">
-              <Database className="w-6 h-6" />
+            <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
+              <Database className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-3xl font-bold">Welcome Back</h1>
           </div>
-          <div className="flex items-center space-x-2 ml-11" style={{ color: '#D4D0C0' }}>
-            <BarChart3 className="w-4 h-4" />
+          <div className="flex items-center space-x-2 ml-11" style={{ color: '#d7dfea' }}>
+            <BarChart3 className="w-4 h-4 text-white" />
             <span className="text-sm">Start analyzing your data with powerful insights</span>
           </div>
         </div>
@@ -214,7 +214,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
             {/* Left: Get Data */}
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="p-2 rounded-lg" style={{ background: '#5B6B7F' }}>
+                <div className="p-2 rounded-lg" style={{ background: '#6D8196' }}>
                   <FolderOpen className="w-4 h-4 text-white" />
                 </div>
                 <h2 className="text-xl font-bold" style={{ color: '#3D3D3D' }}>Get Data</h2>
@@ -223,7 +223,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
               <div
                 className="border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-300"
                 style={{
-                  borderColor: isDragging ? '#5B6B7F' : '#C4C0B0',
+                  borderColor: isDragging ? '#3b82f6' : '#d7dfea',
                   backgroundColor: isDragging ? '#FFFDF7' : '#FFFFFF',
                   transform: isDragging ? 'scale(1.02)' : 'scale(1)'
                 }}
@@ -232,12 +232,12 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                 onDragLeave={handleDragLeave}
               >
                 <div className="relative inline-block mb-4">
-                  <div className="relative p-4 rounded-2xl shadow-md" style={{ background: '#5B6B7F' }}>
+                  <div className="relative p-4 rounded-2xl shadow-md" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
                     <Upload className="h-10 w-10 text-white" />
                   </div>
                 </div>
                 <h3 className="text-lg font-bold mb-2" style={{ color: '#3D3D3D' }}>Upload Your Dataset</h3>
-                <p className="mb-5 text-sm" style={{ color: '#6B6B6B' }}>
+                <p className="mb-5 text-sm" style={{ color: '#6D8196' }}>
                   Drag and drop your files here or click to browse
                 </p>
                 <input
@@ -251,17 +251,17 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                 <label
                   htmlFor="file-upload"
                   className="inline-flex items-center space-x-2 px-6 py-3 text-white text-sm font-semibold rounded-xl cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105"
-                  style={{ background: '#5B6B7F' }}
+                  style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
                 >
                   <FolderOpen className="w-4 h-4" />
                   <span>Browse Files</span>
                 </label>
                 <div className="mt-6 flex items-center justify-center space-x-2 text-xs flex-wrap gap-2">
-                  <div className="px-3 py-2 rounded-lg font-medium flex items-center space-x-1.5" style={{ backgroundColor: '#E8E4D6', color: '#5B6B7F' }}>
+                  <div className="px-3 py-2 rounded-lg font-medium flex items-center space-x-1.5" style={{ backgroundColor: '#f0f4f9', color: '#3b82f6' }}>
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>CSV</span>
                   </div>
-                  <div className="px-3 py-2 rounded-lg font-medium flex items-center space-x-1.5" style={{ backgroundColor: '#D4D0C0', color: '#3D3D3D' }}>
+                  <div className="px-3 py-2 rounded-lg font-medium flex items-center space-x-1.5" style={{ backgroundColor: '#e5e9f3', color: '#10263f' }}>
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>Excel (.xlsx)</span>
                   </div>
@@ -270,7 +270,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                     <span>Excel (.xls)</span>
                   </div>
                 </div>
-                <p className="mt-4 text-xs font-medium flex items-center justify-center space-x-1" style={{ color: '#6B6B6B' }}>
+                <p className="mt-4 text-xs font-medium flex items-center justify-center space-x-1" style={{ color: '#6D8196' }}>
                   <Layers className="w-3.5 h-3.5" />
                   <span>You can select multiple files to combine into one dataset</span>
                 </p>
@@ -278,25 +278,25 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
 
               {/* Selected Files List */}
               {selectedFiles.length > 0 && (
-                <div className="mt-4 bg-white rounded-xl p-4 shadow-md" style={{ border: '1px solid #D4D0C0' }}>
+                <div className="mt-4 bg-white rounded-xl p-4 shadow-md" style={{ border: '1px solid #d7dfea' }}>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-bold flex items-center space-x-2" style={{ color: '#3D3D3D' }}>
-                      <Layers className="w-4 h-4" style={{ color: '#5B6B7F' }} />
+                      <Layers className="w-4 h-4" style={{ color: '#6D8196' }} />
                       <span>Selected Files ({selectedFiles.length})</span>
                     </h3>
                   </div>
                   <div className="space-y-2 max-h-48 overflow-auto mb-3">
                     {selectedFiles.map((file, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-2 rounded-lg" style={{ background: '#F8F6F0' }}>
+                      <div key={idx} className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'rgba(109, 129, 150, 0.10)' }}>
                         <div className="flex items-center space-x-2 flex-1 min-w-0">
-                          <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: '#5B6B7F' }} />
+                          <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: '#6D8196' }} />
                           <span className="text-sm truncate" style={{ color: '#3D3D3D' }}>{file.name}</span>
-                          <span className="text-xs" style={{ color: '#6B6B6B' }}>({(file.size / 1024).toFixed(1)} KB)</span>
+                          <span className="text-xs" style={{ color: '#6D8196' }}>({(file.size / 1024).toFixed(1)} KB)</span>
                         </div>
                         <button
                           onClick={() => handleRemoveFile(idx)}
                           className="ml-2 text-xs font-semibold"
-                          style={{ color: '#6B6B6B' }}
+                          style={{ color: '#6D8196' }}
                         >
                           Remove
                         </button>
@@ -306,7 +306,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                   <button
                     onClick={handleCombineAndProcess}
                     className="w-full px-4 py-2.5 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
-                    style={{ background: '#5B6B7F' }}
+                    style={{ background: '#6D8196' }}
                   >
                     <Layers className="w-4 h-4" />
                     <span>Combine & Process {selectedFiles.length} {selectedFiles.length === 1 ? 'File' : 'Files'}</span>
@@ -318,22 +318,22 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
             {/* Right: Recent Files */}
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="p-2 rounded-lg" style={{ background: '#5B6B7F' }}>
+                <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
                   <Clock className="w-4 h-4 text-white" />
                 </div>
                 <h2 className="text-xl font-bold" style={{ color: '#3D3D3D' }}>Recent Files</h2>
               </div>
 
-              <div className="bg-white rounded-2xl overflow-hidden shadow-md" style={{ border: '1px solid #D4D0C0' }}>
+              <div className="bg-white rounded-2xl overflow-hidden shadow-md" style={{ border: '1px solid #D7DFEA' }}>
                 {recentFiles.length === 0 ? (
                   <div className="p-12 text-center">
                     <div className="relative inline-block mb-3">
-                      <div className="relative p-4 rounded-2xl" style={{ backgroundColor: '#D4D0C0' }}>
-                        <FileSpreadsheet className="w-10 h-10" style={{ color: '#5B6B7F' }} />
+                      <div className="relative p-4 rounded-2xl" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
+                        <FileSpreadsheet className="w-10 h-10 text-white" />
                       </div>
                     </div>
                     <p className="text-base font-semibold" style={{ color: '#3D3D3D' }}>No recent files</p>
-                    <p className="text-sm mt-2 flex items-center justify-center space-x-1.5" style={{ color: '#6B6B6B' }}>
+                    <p className="text-sm mt-2 flex items-center justify-center space-x-1.5" style={{ color: '#6D8196' }}>
                       <TrendingUp className="w-3.5 h-3.5" />
                       <span>Upload a file to get started</span>
                     </p>
@@ -352,14 +352,14 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                             borderRadius: '0.5rem'
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#F8F6F0';
+                            e.currentTarget.style.background = 'rgba(109, 129, 150, 0.10)';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = 'rgba(255, 255, 255, 0)';
                           }}
                         >
                           <div className="flex items-center space-x-3">
-                            <div className="p-2 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-200" style={{ background: '#5B6B7F' }}>
+                            <div className="p-2 rounded-xl shadow-sm group-hover:scale-110 transition-transform duration-200" style={{ background: '#6D8196' }}>
                               {fileInfo.isCombined ? (
                                 <Layers className="w-5 h-5 text-white" />
                               ) : (
@@ -368,19 +368,19 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-semibold text-sm transition-colors truncate" style={{ color: '#3D3D3D' }}>{file.name}</h4>
-                              <div className="flex items-center space-x-2 text-xs mt-1 flex-wrap" style={{ color: '#6B6B6B' }}>
+                              <div className="flex items-center space-x-2 text-xs mt-1 flex-wrap" style={{ color: '#6D8196' }}>
                                 <div className="flex items-center space-x-1">
                                   <Clock className="w-3 h-3" />
                                   <span>{formatDate(file.date)}</span>
                                 </div>
                                 <span>•</span>
-                                <div className="px-2 py-0.5 rounded-md font-medium" style={{ backgroundColor: '#E8E4D6', color: '#5B6B7F' }}>
+                                <div className="px-2 py-0.5 rounded-md font-medium" style={{ backgroundColor: 'rgba(109, 129, 150, 0.18)', color: '#10263f' }}>
                                   {file.rows.toLocaleString()} rows
                                 </div>
                                 {fileInfo.isCombined && (
                                   <>
                                     <span>•</span>
-                                    <div className="px-2 py-0.5 rounded-md font-medium flex items-center space-x-1" style={{ backgroundColor: '#D4D0C0', color: '#3D3D3D' }}>
+                                    <div className="px-2 py-0.5 rounded-md font-medium flex items-center space-x-1" style={{ backgroundColor: 'rgba(30, 51, 80, 0.16)', color: '#10263f' }}>
                                       <Layers className="w-3 h-3" />
                                       <span>{fileInfo.sourceCount} files combined</span>
                                     </div>
@@ -400,35 +400,35 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D4D0C0' }}>
+            <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D7DFEA' }}>
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-semibold uppercase" style={{ color: '#5B6B7F' }}>Total Analyses</div>
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#5B6B7F' }}></div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#6D8196' }}>Total Analyses</div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196' }}></div>
               </div>
               <div className="text-4xl font-bold" style={{ color: '#3D3D3D' }}>
                 {recentFiles.length}
               </div>
-              <div className="mt-2 text-xs" style={{ color: '#6B6B6B' }}>Files processed</div>
+              <div className="mt-2 text-xs" style={{ color: '#6D8196' }}>Files processed</div>
             </div>
-            <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D4D0C0' }}>
+            <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D7DFEA' }}>
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-semibold uppercase" style={{ color: '#5B6B7F' }}>Data Cleaned</div>
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#5B6B7F', animationDelay: '0.5s' }}></div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#6D8196' }}>Data Cleaned</div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196', animationDelay: '0.5s' }}></div>
               </div>
               <div className="text-4xl font-bold" style={{ color: '#3D3D3D' }}>
                 {recentFiles.reduce((acc, f) => acc + f.rows, 0).toLocaleString()}
               </div>
-              <div className="mt-2 text-xs" style={{ color: '#6B6B6B' }}>Total rows processed</div>
+              <div className="mt-2 text-xs" style={{ color: '#6D8196' }}>Total rows processed</div>
             </div>
-            <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D4D0C0' }}>
+            <div className="group bg-white rounded-xl shadow-md p-6 border transition-all duration-300 hover:shadow-lg hover:scale-105" style={{ borderColor: '#D7DFEA' }}>
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-semibold uppercase" style={{ color: '#5B6B7F' }}>Status</div>
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#5B6B7F', animationDelay: '1s' }}></div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#6D8196' }}>Status</div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196', animationDelay: '1s' }}></div>
               </div>
               <div className="flex items-center">
-                <CheckCircle className="w-8 h-8" style={{ color: '#5B6B7F' }} />
+                <CheckCircle className="w-8 h-8" style={{ color: '#6D8196' }} />
               </div>
-              <div className="mt-2 text-xs" style={{ color: '#6B6B6B' }}>System operational</div>
+              <div className="mt-2 text-xs" style={{ color: '#6D8196' }}>System operational</div>
             </div>
           </div>
         </div>
@@ -436,3 +436,4 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
     </div>
   );
 }
+

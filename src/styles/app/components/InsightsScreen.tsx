@@ -95,7 +95,7 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
       <div className="backdrop-blur-sm border-b-2 px-8 py-5 shadow-xl text-white" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)', borderColor: '#d7dfea' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="p-3 rounded-xl shadow-lg" style={{ background: '#5B6B7F' }}>
+            <div className="p-3 rounded-xl shadow-lg" style={{ background: '#3b82f6' }}>
               <Lightbulb className="w-7 h-7 text-white" />
             </div>
             <div>
@@ -126,7 +126,7 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
             <button
               onClick={handleDownloadInsights}
               className="px-5 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#5B6B7F' }}
+              style={{ background: '#6D8196' }}
             >
               <Download className="w-4 h-4" />
               <span>Export Insights</span>
@@ -134,7 +134,7 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
             <button
               onClick={onCreateReport}
               className="px-6 py-2.5 text-white rounded-xl font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{ background: '#5B6B7F' }}
+              style={{ background: '#6D8196' }}
             >
               <span>Create Visualizations</span>
               <ArrowRight className="w-4 h-4" />
@@ -154,8 +154,8 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
                 </div>
                 <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196' }}></div>
               </div>
-              <div className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#6D8196' }}>Total Records</div>
-              <div className="text-5xl font-bold" style={{ color: '#4A4A4A' }}>
+              <div className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#5b6b7f' }}>Total Records</div>
+              <div className="text-5xl font-bold" style={{ color: '#10263f' }}>
                 {data.length.toLocaleString()}
               </div>
             </div>
@@ -166,8 +166,8 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
                 </div>
                 <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196' }}></div>
               </div>
-              <div className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#6D8196' }}>Numeric Fields</div>
-              <div className="text-5xl font-bold" style={{ color: '#4A4A4A' }}>
+              <div className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#5b6b7f' }}>Numeric Fields</div>
+              <div className="text-5xl font-bold" style={{ color: '#10263f' }}>
                 {numericColumns.length}
               </div>
             </div>
@@ -178,7 +178,7 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
                 </div>
                 <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: '#6D8196' }}></div>
               </div>
-              <div className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#6D8196' }}>Categorical Fields</div>
+              <div className="text-sm font-semibold uppercase tracking-wide mb-2" style={{ color: '#5b6b7f' }}>Categorical Fields</div>
               <div className="text-5xl font-bold" style={{ color: '#4A4A4A' }}>
                 {categoricalColumns.length}
               </div>
@@ -327,3 +327,4 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
     </div>
   );
 }
+

@@ -162,7 +162,7 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
   return (
     <div className="h-screen flex flex-col" style={{ background: '#E8E4D6' }}>
       {/* Header */}
-      <div className="text-white px-6 py-3 flex items-center justify-between" style={{ background: '#5B6B7F' }}>
+      <div className="text-white px-6 py-3 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
         <div>
           <h1 className="text-lg">Power Query Editor</h1>
           <div className="text-sm" style={{ color: '#FFFFE3' }}>{fileName}</div>
@@ -178,7 +178,7 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
           <button
             onClick={() => onCloseAndApply(currentData)}
             className="px-6 py-2 rounded flex items-center space-x-2"
-            style={{ background: '#5B6B7F' }}
+            style={{ background: '#6D8196' }}
           >
             <Check className="w-4 h-4" />
             <span>Close & Apply</span>
@@ -188,10 +188,10 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar */}
-        <div className="w-80 border-r flex flex-col" style={{ backgroundColor: '#F8F6F0', borderColor: '#D4D0C0' }}>
-          <div className="p-4 border-b bg-white" style={{ borderColor: '#D4D0C0' }}>
+        <div className="w-80 border-r flex flex-col" style={{ backgroundColor: 'rgba(109, 129, 150, 0.08)', borderColor: '#D7DFEA' }}>
+          <div className="p-4 border-b bg-white" style={{ borderColor: '#D7DFEA' }}>
             <h2 className="text-sm uppercase mb-3" style={{ color: '#6D8196' }}>Queries (1)</h2>
-            <div className="border rounded p-2 text-sm" style={{ backgroundColor: '#E8E4D6', borderColor: '#5B6B7F', color: '#3D3D3D' }}>
+            <div className="border rounded p-2 text-sm" style={{ backgroundColor: 'rgba(109, 129, 150, 0.16)', borderColor: '#6D8196', color: '#10263f' }}>
               {fileName.replace(/\.[^/.]+$/, '')}
             </div>
           </div>
@@ -205,13 +205,13 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
                   className="group flex items-center justify-between px-3 py-2 rounded text-sm cursor-pointer border"
                   style={{
                     backgroundColor: idx === currentStepIndex ? 'rgba(109, 129, 150, 0.15)' : 'white',
-                    borderColor: idx === currentStepIndex ? '#6D8196' : '#CBCBCB',
+                    borderColor: idx === currentStepIndex ? '#6D8196' : '#D7DFEA',
                     color: '#4A4A4A'
                   }}
                   onClick={() => goToStep(idx)}
                   onMouseEnter={(e) => {
                     if (idx !== currentStepIndex) {
-                      e.currentTarget.style.backgroundColor = '#F8F6F0';
+                      e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -239,7 +239,7 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
             </div>
           </div>
 
-          <div className="p-4 border-t bg-white" style={{ borderColor: '#D4D0C0' }}>
+          <div className="p-4 border-t bg-white" style={{ borderColor: '#D7DFEA' }}>
             <div className="text-sm space-y-2">
               <div className="flex justify-between">
                 <span style={{ color: '#6D8196' }}>Rows:</span>
@@ -266,7 +266,7 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Transform Ribbon */}
-          <div className="border-b p-4" style={{ backgroundColor: '#F8F6F0', borderColor: '#D4D0C0' }}>
+          <div className="border-b p-4" style={{ backgroundColor: 'rgba(109, 129, 150, 0.08)', borderColor: '#D7DFEA' }}>
             <div className="flex items-center justify-between mb-3">
               <div className="text-xs uppercase" style={{ color: '#6D8196' }}>Transform Operations</div>
               {currentStepIndex < steps.length - 1 && (
@@ -284,9 +284,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleRemoveDuplicates}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
@@ -298,9 +298,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleRemoveMissingRows}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
@@ -312,9 +312,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleFillMissing}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
@@ -326,9 +326,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleTrimWhitespace}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
@@ -340,9 +340,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleUppercase}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
@@ -354,9 +354,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleLowercase}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
@@ -368,7 +368,7 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
               <button
                 onClick={handleConvertTypes}
                 className="px-4 py-2 bg-white border rounded text-sm transition-all"
-                style={{ borderColor: '#CBCBCB', color: '#4A4A4A' }}
+                style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
                 }}
@@ -383,14 +383,14 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
 
           {/* Data Preview */}
           <div className="flex-1 overflow-auto p-4">
-            <div className="bg-white border rounded-lg overflow-hidden" style={{ borderColor: '#CBCBCB' }}>
+            <div className="bg-white border rounded-lg overflow-hidden" style={{ borderColor: '#D7DFEA' }}>
               <table className="w-full text-sm">
-                <thead className="sticky top-0" style={{ backgroundColor: 'rgba(203, 203, 203, 0.2)' }}>
+                <thead className="sticky top-0" style={{ backgroundColor: 'rgba(109, 129, 150, 0.14)' }}>
                   <tr>
                     {columns.map((col) => {
                       const type = getColumnType(col);
                       return (
-                        <th key={col} className="px-4 py-3 text-left border-b" style={{ borderColor: '#CBCBCB' }}>
+                        <th key={col} className="px-4 py-3 text-left border-b" style={{ borderColor: '#D7DFEA' }}>
                           <div className="flex items-center space-x-2">
                             {type === 'number' ? (
                               <Hash className="w-4 h-4" style={{ color: '#6D8196' }} />
@@ -408,9 +408,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
                 </thead>
                 <tbody>
                   {currentData.slice(0, 100).map((row, idx) => (
-                    <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#CBCBCB' }}
+                    <tr key={idx} className="border-b transition-colors" style={{ borderColor: '#D7DFEA' }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 227, 0.2)';
+                        e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.08)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = '';
@@ -421,7 +421,7 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
                         return (
                           <td key={col} className="px-4 py-2">
                             {isEmpty ? (
-                              <span className="italic" style={{ color: '#4A4A4A', backgroundColor: 'rgba(203, 203, 203, 0.3)', padding: '2px 4px', borderRadius: '4px' }}>null</span>
+                              <span className="italic" style={{ color: '#10263f', backgroundColor: 'rgba(109, 129, 150, 0.16)', padding: '2px 4px', borderRadius: '4px' }}>null</span>
                             ) : (
                               <span style={{ color: '#4A4A4A' }}>{String(value)}</span>
                             )}
@@ -439,3 +439,4 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
     </div>
   );
 }
+
