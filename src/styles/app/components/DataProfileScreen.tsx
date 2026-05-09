@@ -110,9 +110,9 @@ export function DataProfileScreen({ data, fileName, onStartCleaning, onBackToHom
   };
 
   return (
-    <div className="h-screen flex flex-col" style={{ background: '#E8E4D6' }}>
+    <div className="h-screen flex flex-col" style={{ background: '#f4f6fb' }}>
       {/* Header */}
-      <div className="text-white px-6 py-4 shadow-lg" style={{ background: '#5B6B7F' }}>
+      <div className="text-white px-6 py-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)' }}>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-1 flex items-center space-x-2">

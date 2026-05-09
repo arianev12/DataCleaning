@@ -190,9 +190,9 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: '#E8E4D6' }}>
+    <div className="min-h-screen" style={{ background: 'radial-gradient(circle at top left, rgba(242, 200, 17, 0.12), transparent 28%), radial-gradient(circle at right top, rgba(18, 58, 90, 0.12), transparent 26%), #f4f6fb' }}>
       {/* Header */}
-      <div className="text-white px-6 py-8 shadow-lg" style={{ background: '#5B6B7F' }}>
+      <div className="text-white px-6 py-8 shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center space-x-3 mb-2">
             <div className="p-2 bg-white/20 rounded-lg">

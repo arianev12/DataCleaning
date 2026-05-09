@@ -16,7 +16,7 @@ export function LoadingScreen() {
   }, []);
 
   return (
-    <div className="h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #6D8196 0%, #4A4A4A 100%)' }}>
+    <div className="h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-20 w-72 h-72 rounded-full blur-3xl animate-pulse" style={{ backgroundColor: '#6D8196', opacity: 0.2 }}></div>

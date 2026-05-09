@@ -143,10 +143,10 @@ export function ReportView({ data, fileName, onTransformData, onViewInsights, on
   };
 
   return (
-    <div className="h-screen flex flex-col" style={{ background: '#E8E4D6' }}>
+    <div className="h-screen flex flex-col" style={{ background: '#f4f6fb' }}>
       {/* Top Ribbon */}
-      <div className="bg-white/90 backdrop-blur-sm border-b shadow-lg" style={{ borderColor: '#D4D0C0' }}>
-        <div className="px-8 py-4 flex items-center justify-between border-b" style={{ borderColor: '#D4D0C0' }}>
+      <div className="bg-white/90 backdrop-blur-sm border-b shadow-lg" style={{ borderColor: '#d7dfea' }}>
+        <div className="px-8 py-4 flex items-center justify-between border-b" style={{ borderColor: '#d7dfea' }}>
           <div className="flex items-center space-x-4">
             <div className="p-3 rounded-xl shadow-lg" style={{ background: '#5B6B7F' }}>
               <BarChart3 className="w-7 h-7 text-white" />

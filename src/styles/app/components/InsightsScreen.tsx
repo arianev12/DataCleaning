@@ -90,9 +90,9 @@ export function InsightsScreen({ data, fileName, onCreateReport, onBackToCompare
   };
 
   return (
-    <div className="h-screen flex flex-col" style={{ background: '#E8E4D6' }}>
+    <div className="h-screen flex flex-col" style={{ background: '#f4f6fb' }}>
       {/* Header */}
-      <div className="backdrop-blur-sm border-b-2 px-8 py-5 shadow-xl text-white" style={{ background: '#5B6B7F', borderColor: '#D4D0C0' }}>
+      <div className="backdrop-blur-sm border-b-2 px-8 py-5 shadow-xl text-white" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 100%)', borderColor: '#d7dfea' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="p-3 rounded-xl shadow-lg" style={{ background: '#5B6B7F' }}>
