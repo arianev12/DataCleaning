@@ -254,11 +254,15 @@ export function DataComparisonScreen({
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = '';
                           }}>
-                          {columns.map(col => (
-                            <td key={col} className="px-4 py-2" style={{ color: '#10263f' }}>
-                              {String(row[col] || '')}
-                            </td>
-                          ))}
+                          {columns.map(col => {
+                            const val = row[col];
+                            const isEmpty = val === null || val === undefined || val === '';
+                            return (
+                              <td key={col} className="px-4 py-2" style={{ color: '#10263f' }}>
+                                {isEmpty ? <span className="italic" style={{ color: '#5b6b7f' }}>{''}</span> : String(val)}
+                              </td>
+                            );
+                          })}
                         </tr>
                       ))}
                     </tbody>
@@ -302,7 +306,7 @@ export function DataComparisonScreen({
                               {isEmpty && viewMode === 'original' ? (
                                 <span className="italic px-1" style={{ color: '#10263f', backgroundColor: 'rgba(215, 223, 234, 0.45)' }}>null</span>
                               ) : (
-                                <span style={{ color: '#10263f' }}>{String(value || '')}</span>
+                                <span style={{ color: '#10263f' }}>{isEmpty ? '' : String(value)}</span>
                               )}
                             </td>
                           );

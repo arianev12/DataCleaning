@@ -36,6 +36,9 @@ export function VisualizationCard({
   onUpdate,
   onRemove
 }: VisualizationCardProps) {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
+  const [showTitleControls, setShowTitleControls] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showTextFormatting, setShowTextFormatting] = useState(false);
@@ -160,6 +163,30 @@ export function VisualizationCard({
   const chartData = prepareChartData();
 
   const renderChart = () => {
+    if (visualization.type === 'text') {
+      return (
+        <div className="p-4" style={{ height: visualization.height }}>
+          <div className="h-full rounded-2xl border-2 border-dashed flex flex-col" style={{ borderColor: '#D7DFEA', background: 'linear-gradient(180deg, rgba(16, 38, 63, 0.03), rgba(59, 130, 246, 0.03))' }}>
+            <div className="px-4 pt-4 text-xs uppercase tracking-wide" style={{ color: '#6D8196' }}>Text Box</div>
+            <textarea
+              value={visualization.title}
+              onChange={(e) => onUpdate({ title: e.target.value })}
+              placeholder="Type a title or note here..."
+              className="flex-1 w-full resize-none bg-transparent outline-none px-4 py-3"
+              style={{
+                color: visualization.textColor,
+                fontSize: visualization.fontSize + 2,
+                fontFamily: visualization.fontFamily,
+                fontWeight: visualization.titleBold ? 'bold' : 'normal',
+                fontStyle: visualization.titleItalic ? 'italic' : 'normal',
+                minHeight: visualization.height - 60
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
+
     if (visualization.type === 'table') {
       return (
         <div className="overflow-auto" style={{ height: visualization.height }}>
@@ -322,6 +349,24 @@ export function VisualizationCard({
     fontStyle: visualization.titleItalic ? 'italic' : 'normal'
   };
 
+  const saveTitle = (val: string) => {
+    onUpdate({ title: val });
+    setIsEditingTitle(false);
+  };
+
+  const handleTitleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      (e.target as HTMLInputElement).blur();
+    }
+  };
+
+  useEffect(() => {
+    if (isEditingTitle && titleInputRef.current) {
+      titleInputRef.current.focus();
+      titleInputRef.current.select();
+    }
+  }, [isEditingTitle]);
+
   return (
     <div
       ref={cardRef}
@@ -329,16 +374,45 @@ export function VisualizationCard({
       style={{ width: Math.max(visualization.width, 350), borderColor: '#D7DFEA' }}
     >
       {/* Header */}
-      <div className="border-b-2 px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
-        <input
-          type="text"
-          value={visualization.title}
-          onChange={(e) => onUpdate({ title: e.target.value })}
-          style={titleStyle}
-          className="w-full sm:flex-1 bg-white/80 border-2 border-transparent outline-none focus:bg-white rounded-xl px-4 py-2 transition-all duration-200 hover:bg-white/90"
-          placeholder="Chart Title"
-        />
-        <div className="flex items-center space-x-1.5 flex-wrap gap-y-1.5 justify-end w-full sm:w-auto">
+      <div className="border-b-2 px-5 py-4 flex flex-col gap-3" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
+        <div
+          className="relative w-full"
+          onMouseEnter={() => setShowTitleControls(true)}
+          onMouseLeave={() => setShowTitleControls(false)}
+        >
+          {isEditingTitle ? (
+            <input
+              ref={(el) => (titleInputRef.current = el)}
+              type="text"
+              value={visualization.title}
+              onChange={(e) => onUpdate({ title: e.target.value })}
+              onBlur={(e) => {
+                onUpdate({ title: e.target.value });
+                setIsEditingTitle(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  (e.target as HTMLInputElement).blur();
+                }
+              }}
+              style={titleStyle}
+              className="w-full bg-white border-2 border-[#D7DFEA] outline-none rounded-xl px-4 py-2 pr-44 transition-all duration-200"
+              placeholder="Chart Title"
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsEditingTitle(true)}
+              onDoubleClick={() => setIsEditingTitle(true)}
+              style={titleStyle}
+              className="w-full text-left bg-transparent border-0 outline-none px-1 py-1 pr-44 transition-all duration-200 cursor-text"
+            >
+              <span className="block truncate">{visualization.title || 'Chart Title'}</span>
+            </button>
+          )}
+          <div
+            className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-1.5 flex-wrap gap-y-1.5 justify-end transition-all duration-200 ${showTitleControls || isEditingTitle ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-2 pointer-events-none'}`}
+          >
           <button
             onClick={() => setShowConfig(!showConfig)}
             className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
@@ -399,6 +473,7 @@ export function VisualizationCard({
           >
             <X className="w-4 h-4" />
           </button>
+        </div>
         </div>
       </div>
 
@@ -614,6 +689,24 @@ export function VisualizationCard({
 
       {/* Chart Content */}
       <div className="p-6 relative" style={{ background: '#FFFFFF' }}>
+        <div className="absolute left-6 right-6 top-3 z-20">
+          {isEditingTitle ? (
+            <input
+              ref={(el) => (titleInputRef.current = el)}
+              type="text"
+              value={visualization.title}
+              onChange={(e) => onUpdate({ title: e.target.value })}
+              onBlur={(e) => saveTitle(e.target.value)}
+              onKeyDown={handleTitleKey}
+              style={titleStyle}
+              className="w-full bg-white/90 border-2 border-[#D7DFEA] rounded-xl px-3 py-2 outline-none"
+            />
+          ) : (
+            <div onClick={() => setIsEditingTitle(true)} style={{ cursor: 'text' }}>
+              <div style={titleStyle} className="text-base font-semibold truncate text-center">{visualization.title}</div>
+            </div>
+          )}
+        </div>
         {renderChart()}
 
         {/* Resize Handles - All 4 corners and 4 edges */}

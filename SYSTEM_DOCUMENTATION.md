@@ -1,4 +1,4 @@
-# Data Cleaning and Analytics System
+# InsightFlow
 ## BAT403 – Foundations of Enterprise Data Management
 
 **Power BI-Style Professional Data Analytics Platform**
@@ -461,6 +461,7 @@ Students will understand:
 
 ---
 
+**System Name**: InsightFlow  
 **System Version**: 1.0.0  
 **Created For**: BAT403 – Foundations of Enterprise Data Management  
 **Date**: May 2026

@@ -67,12 +67,24 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
   const handleFillMissing = () => {
     addStep('Filled Missing Values', (data) => {
       const columns = Object.keys(data[0] || {});
+      const looksNumeric = (val: any) => {
+        if (val === null || val === undefined || val === '') return false;
+        const s = String(val).trim().replace(/[$,\s%]/g, '');
+        if (s === '') return false;
+        return !isNaN(Number(s));
+      };
+
+      const columnIsNumeric: Record<string, boolean> = {};
+      columns.forEach(col => {
+        const sampleValues = data.map(r => r[col]).filter(v => v !== null && v !== undefined && v !== '');
+        columnIsNumeric[col] = sampleValues.some(v => looksNumeric(v));
+      });
+
       return data.map(row => {
-        const newRow = { ...row };
+        const newRow = { ...row } as any;
         columns.forEach(col => {
           if (newRow[col] === null || newRow[col] === undefined || newRow[col] === '') {
-            const sampleValues = data.map(r => r[col]).filter(v => v !== null && v !== undefined && v !== '');
-            if (sampleValues.length > 0 && !isNaN(Number(sampleValues[0]))) {
+            if (columnIsNumeric[col]) {
               newRow[col] = 0;
             } else {
               newRow[col] = 'N/A';
@@ -158,6 +170,25 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
     if (!isNaN(Date.parse(sample))) return 'date';
     return 'text';
   };
+  const getQueryCount = () => {
+    const combinedMatch = fileName.match(/^Combined_(\d+)_files_/i);
+    return combinedMatch ? Number(combinedMatch[1]) : 1;
+  };
+
+  const getChangedRowCount = () => {
+    const sharedLength = Math.min(originalData.length, currentData.length);
+    let changed = Math.abs(originalData.length - currentData.length);
+
+    for (let i = 0; i < sharedLength; i += 1) {
+      if (JSON.stringify(originalData[i]) !== JSON.stringify(currentData[i])) {
+        changed += 1;
+      }
+    }
+
+    return changed;
+  };
+
+  const typesPresent = columns.some(col => getColumnType(col) !== 'text');
 
   return (
     <div className="h-screen flex flex-col" style={{ background: '#E8E4D6' }}>
@@ -199,7 +230,9 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
         {/* Left Sidebar */}
         <div className="w-80 border-r flex flex-col" style={{ backgroundColor: 'rgba(109, 129, 150, 0.08)', borderColor: '#D7DFEA' }}>
           <div className="p-4 border-b bg-white" style={{ borderColor: '#D7DFEA' }}>
-            <h2 className="text-sm uppercase mb-3" style={{ color: '#6D8196' }}>Queries (1)</h2>
+            <h2 className="text-sm uppercase mb-3" style={{ color: '#6D8196' }}>
+              Queries ({getQueryCount()})
+            </h2>
             <div className="border rounded p-2 text-sm" style={{ backgroundColor: 'rgba(109, 129, 150, 0.16)', borderColor: '#6D8196', color: '#10263f' }}>
               {fileName.replace(/\.[^/.]+$/, '')}
             </div>
@@ -263,6 +296,10 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
                 <span style={{ color: missingCount > 0 ? '#4A4A4A' : '#6D8196' }}>
                   {missingCount}
                 </span>
+              </div>
+              <div className="flex justify-between">
+                <span style={{ color: '#6D8196' }}>Changed:</span>
+                <span style={{ color: '#4A4A4A' }}>{getChangedRowCount()}</span>
               </div>
               <div className="flex justify-between">
                 <span style={{ color: '#6D8196' }}>Step:</span>
@@ -376,15 +413,18 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
 
               <button
                 onClick={handleConvertTypes}
-                className="px-4 py-2 bg-white border rounded text-sm transition-all"
+                className="px-4 py-2 bg-white border rounded text-sm transition-all flex items-center space-x-2"
                 style={{ borderColor: '#D7DFEA', color: '#4A4A4A' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(203, 203, 203, 0.2)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.backgroundColor = 'rgba(109, 129, 150, 0.10)';
                 }}
                 onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.backgroundColor = 'white';
                 }}
               >
+                <Type className="w-4 h-4" style={{ color: '#4A4A4A' }} />
                 Detect Types
               </button>
             </div>
@@ -408,7 +448,10 @@ export function TransformDataEditor({ originalData, fileName, onCloseAndApply, o
                             ) : (
                               <Type className="w-4 h-4" style={{ color: '#4A4A4A' }} />
                             )}
-                            <span style={{ color: '#4A4A4A' }}>{col}</span>
+                            <div className="flex items-baseline space-x-2">
+                              <span style={{ color: '#4A4A4A' }}>{col}</span>
+                              <span className="text-xs" style={{ color: '#6D8196' }}>{type}</span>
+                            </div>
                           </div>
                         </th>
                       );

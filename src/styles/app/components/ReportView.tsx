@@ -15,7 +15,8 @@ import {
   Layers,
   Activity,
   Camera,
-  Settings
+  Settings,
+  Type
 } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { VisualizationCard } from './VisualizationCard';
@@ -30,7 +31,7 @@ interface ReportViewProps {
 
 export interface Visualization {
   id: string;
-  type: 'bar' | 'line' | 'pie' | 'table' | 'stackedBar' | 'area' | 'donut' | 'scatter' | 'column';
+  type: 'bar' | 'line' | 'pie' | 'table' | 'stackedBar' | 'area' | 'donut' | 'scatter' | 'column' | 'text';
   xAxis: string;
   yAxis: string;
   title: string;
@@ -70,9 +71,9 @@ export function ReportView({ data, fileName, onTransformData, onViewInsights, on
     const newViz: Visualization = {
       id: `viz-${Date.now()}-${Math.random()}`,
       type,
-      xAxis: categoricalColumns[0] || columns[0] || '',
-      yAxis: numericColumns[0] || columns[1] || '',
-      title: `${type.charAt(0).toUpperCase() + type.slice(1)} Chart`,
+      xAxis: type === 'text' ? '' : (categoricalColumns[0] || columns[0] || ''),
+      yAxis: type === 'text' ? '' : (numericColumns[0] || columns[1] || ''),
+      title: type === 'text' ? 'Add your title here' : `${type.charAt(0).toUpperCase() + type.slice(1)} Chart`,
       titleColor: '#10263f',
       titleFontSize: 20,
       titleFontFamily: 'ui-sans-serif, system-ui, sans-serif',
@@ -126,10 +127,21 @@ export function ReportView({ data, fileName, onTransformData, onViewInsights, on
     if (!canvasRef.current) return;
 
     try {
+      const node = canvasRef.current;
+      const width = node.scrollWidth;
+      const height = node.scrollHeight;
+
       const dataUrl = await toPng(canvasRef.current, {
         quality: 0.95,
         pixelRatio: 2,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        width,
+        height,
+        style: {
+          width: `${width}px`,
+          height: `${height}px`,
+          overflow: 'visible'
+        }
       });
 
       const link = document.createElement('a');
@@ -322,69 +334,96 @@ export function ReportView({ data, fileName, onTransformData, onViewInsights, on
               </div>
               <span className="text-xs font-medium mt-2" style={{ color: '#10263f' }}>Table</span>
             </button>
+
+            <button
+              onClick={() => addVisualization('text')}
+              className="group flex flex-col items-center px-4 py-4 bg-white border-2 rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-110"
+              style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }}
+            >
+              <div className="p-2 rounded-xl transition-colors duration-300" style={{ background: 'linear-gradient(to bottom right, rgba(59, 130, 246, 0.2), rgba(16, 38, 63, 0.2))' }}>
+                <Type className="w-6 h-6 transition-colors duration-300" style={{ color: '#10263f' }} />
+              </div>
+              <span className="text-xs font-medium mt-2" style={{ color: '#10263f' }}>Text</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Canvas Area */}
-        <div ref={canvasRef} className="flex-1 overflow-auto p-6" style={{ background: '#FFFFFF' }}>
-          {visualizations.length === 0 ? (
-            <div className="h-full flex items-center justify-center p-6">
-              <div className="text-center max-w-lg">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-full blur-2xl opacity-20 animate-pulse" style={{ background: '#D4D0C0' }}></div>
-                  <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl p-8 border" style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }}>
-                    <div className="mb-4 relative inline-block">
-                      <div className="p-4 rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
-                        <Plus className="w-12 h-12 text-white" />
-                      </div>
-                      <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center animate-ping" style={{ background: '#D4D0C0' }}>
-                        <Sparkles className="w-3 h-3" style={{ color: '#10263f' }} />
-                      </div>
-                    </div>
-                    <h2 className="text-2xl font-bold mb-3" style={{ color: '#10263f' }}>
-                      Build Your Dashboard
-                    </h2>
-                    <p className="text-sm mb-6 leading-relaxed" style={{ color: '#5b6b7f' }}>
-                      Start creating beautiful visualizations! Click any chart type above to begin.
-                      <br />
-                      <span className="text-xs" style={{ color: '#5b6b7f' }}>Fully customizable • Drag to resize • Professional exports</span>
-                    </p>
-                    <div className="grid grid-cols-3 gap-3">
-                      <div className="p-3 rounded-xl border" style={{ background: '#F8F6F0', borderColor: '#123a5a' }}>
-                        <div className="text-2xl font-bold" style={{ color: '#10263f' }}>{data.length.toLocaleString()}</div>
-                        <div className="text-xs mt-0.5 font-medium" style={{ color: '#10263f' }}>Records</div>
-                      </div>
-                      <div className="p-3 rounded-xl border" style={{ background: '#F8F6F0', borderColor: '#123a5a' }}>
-                        <div className="text-2xl font-bold" style={{ color: '#10263f' }}>{numericColumns.length}</div>
-                        <div className="text-xs mt-0.5 font-medium" style={{ color: '#10263f' }}>Numeric Fields</div>
-                      </div>
-                      <div className="p-3 rounded-xl border" style={{ background: '#F8F6F0', borderColor: '#123a5a' }}>
-                        <div className="text-2xl font-bold" style={{ color: '#10263f' }}>{categoricalColumns.length}</div>
-                        <div className="text-xs mt-0.5 font-medium" style={{ color: '#10263f' }}>Categories</div>
+      <div className="flex-1 flex overflow-hidden" style={{ background: '#f4f6fb' }}>
+        <div className="flex-1 overflow-auto p-6">
+          <div className="mx-auto w-full max-w-[1280px]">
+            <div
+              ref={canvasRef}
+              className="relative mx-auto min-h-[760px] w-full rounded-2xl border-2 border-dashed shadow-2xl overflow-hidden"
+              style={{
+                background: 'linear-gradient(180deg, #ffffff 0%, #fcfdff 100%)',
+                borderColor: '#6D8196'
+              }}
+            >
+              <div className="absolute inset-0 pointer-events-none opacity-[0.18]" style={{
+                backgroundImage: 'linear-gradient(rgba(16,38,63,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(16,38,63,0.08) 1px, transparent 1px)',
+                backgroundSize: '28px 28px'
+              }} />
+              <div className="relative z-10 h-full p-6">
+                {visualizations.length === 0 ? (
+                  <div className="h-full min-h-[700px] flex items-center justify-center p-6">
+                    <div className="text-center max-w-lg">
+                      <div className="relative">
+                        <div className="absolute inset-0 rounded-full blur-2xl opacity-20 animate-pulse" style={{ background: '#D4D0C0' }}></div>
+                        <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl p-8 border" style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }}>
+                          <div className="mb-4 relative inline-block">
+                            <div className="p-4 rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
+                              <Plus className="w-12 h-12 text-white" />
+                            </div>
+                            <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center animate-ping" style={{ background: '#D4D0C0' }}>
+                              <Sparkles className="w-3 h-3" style={{ color: '#10263f' }} />
+                            </div>
+                          </div>
+                          <h2 className="text-2xl font-bold mb-3" style={{ color: '#10263f' }}>
+                            Build Your Dashboard
+                          </h2>
+                          <p className="text-sm mb-6 leading-relaxed" style={{ color: '#5b6b7f' }}>
+                            Start creating beautiful visualizations. Add them, then keep them inside the dashed page area just like the Power BI canvas.
+                            <br />
+                            <span className="text-xs" style={{ color: '#5b6b7f' }}>Fully customizable • Drag to resize • Professional exports</span>
+                          </p>
+                          <div className="grid grid-cols-3 gap-3">
+                            <div className="p-3 rounded-xl border" style={{ background: '#F8F6F0', borderColor: '#123a5a' }}>
+                              <div className="text-2xl font-bold" style={{ color: '#10263f' }}>{data.length.toLocaleString()}</div>
+                              <div className="text-xs mt-0.5 font-medium" style={{ color: '#10263f' }}>Records</div>
+                            </div>
+                            <div className="p-3 rounded-xl border" style={{ background: '#F8F6F0', borderColor: '#123a5a' }}>
+                              <div className="text-2xl font-bold" style={{ color: '#10263f' }}>{numericColumns.length}</div>
+                              <div className="text-xs mt-0.5 font-medium" style={{ color: '#10263f' }}>Numeric Fields</div>
+                            </div>
+                            <div className="p-3 rounded-xl border" style={{ background: '#F8F6F0', borderColor: '#123a5a' }}>
+                              <div className="text-2xl font-bold" style={{ color: '#10263f' }}>{categoricalColumns.length}</div>
+                              <div className="text-xs mt-0.5 font-medium" style={{ color: '#10263f' }}>Categories</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex flex-wrap gap-6 items-start justify-start content-start">
+                    {visualizations.map((viz) => (
+                      <VisualizationCard
+                        key={viz.id}
+                        visualization={viz}
+                        data={data}
+                        columns={columns}
+                        numericColumns={numericColumns}
+                        onUpdate={(updates) => updateVisualization(viz.id, updates)}
+                        onRemove={() => removeVisualization(viz.id)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-          ) : (
-            <div className="flex flex-wrap gap-6 items-start justify-start">
-              {visualizations.map((viz) => (
-                <VisualizationCard
-                  key={viz.id}
-                  visualization={viz}
-                  data={data}
-                  columns={columns}
-                  numericColumns={numericColumns}
-                  onUpdate={(updates) => updateVisualization(viz.id, updates)}
-                  onRemove={() => removeVisualization(viz.id)}
-                />
-              ))}
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Right Fields Pane */}

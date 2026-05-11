@@ -113,7 +113,7 @@ export function LoadingScreen() {
 
         {/* Version */}
         <div className="mt-6 text-xs font-medium" style={{ color: 'rgba(203, 203, 203, 0.5)' }}>
-          BAT403 - Foundations of Enterprise Data Management - Version 1.0.0
+          InsightFlow - BAT403 - Foundations of Enterprise Data Management - Version 1.0.0
         </div>
       </div>
     </div>
