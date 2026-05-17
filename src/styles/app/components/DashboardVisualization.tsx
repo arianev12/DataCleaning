@@ -54,12 +54,13 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
     const generateId = () => {
       return `${chartType}_${selectedXAxis}_${selectedYAxis}_${idCounterRef.current++}`;
     };
+    const isNumericYAxis = numericColumns.includes(selectedYAxis);
 
     if (chartType === 'pie') {
       const frequency: { [key: string]: number } = {};
       data.forEach((row) => {
         const key = String(row[selectedXAxis] || 'N/A');
-        const value = Number(row[selectedYAxis]) || 0;
+        const value = isNumericYAxis ? Number(row[selectedYAxis]) || 0 : 1;
         frequency[key] = (frequency[key] || 0) + value;
       });
 
@@ -76,7 +77,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
 
       data.forEach((row) => {
         const key = String(row[selectedXAxis] || 'N/A');
-        const value = Number(row[selectedYAxis]) || 0;
+        const value = isNumericYAxis ? Number(row[selectedYAxis]) || 0 : 1;
 
         if (!aggregated[key]) {
           aggregated[key] = { sum: 0, count: 0 };
@@ -90,10 +91,12 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
         .map(([name, dataItem]) => ({
           uniqueId: generateId(),
           name,
-          value: dataItem.sum / dataItem.count
+          value: isNumericYAxis ? dataItem.sum / dataItem.count : dataItem.count
         }));
     }
   }, [data, chartType, selectedXAxis, selectedYAxis]);
+
+  const axisLabelStyle = { fill: '#5b6b7f', fontSize: 12 };
 
   return (
     <div className="space-y-6">
@@ -134,9 +137,7 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
               onChange={(e) => setSelectedYAxis(e.target.value)}
               className="w-full px-3 py-2 border border-[#D7DFEA] rounded-lg"
             >
-              {numericColumns.length > 0 ? numericColumns.map(col => (
-                <option key={col} value={col}>{col}</option>
-              )) : columns.map(col => (
+              {columns.map((col) => (
                 <option key={col} value={col}>{col}</option>
               ))}
             </select>
@@ -149,8 +150,14 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
             <ResponsiveContainer width="100%" height="100%" key={`bar-container-${chartType}-${selectedXAxis}-${selectedYAxis}`}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                <YAxis />
+                <XAxis
+                  dataKey="name"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                  label={{ value: selectedXAxis, position: 'insideBottom', offset: -10, ...axisLabelStyle }}
+                />
+                <YAxis label={{ value: selectedYAxis, angle: -90, position: 'insideLeft', ...axisLabelStyle }} />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="value" fill="#3b82f6" name={selectedYAxis} />
@@ -162,8 +169,14 @@ export function DashboardVisualization({ data }: DashboardVisualizationProps) {
             <ResponsiveContainer width="100%" height="100%" key={`line-container-${chartType}-${selectedXAxis}-${selectedYAxis}`}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                <YAxis />
+                <XAxis
+                  dataKey="name"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                  label={{ value: selectedXAxis, position: 'insideBottom', offset: -10, ...axisLabelStyle }}
+                />
+                <YAxis label={{ value: selectedYAxis, angle: -90, position: 'insideLeft', ...axisLabelStyle }} />
                 <Tooltip />
                 <Legend />
                 <Line type="monotone" dataKey="value" stroke="#3b82f6" name={selectedYAxis} strokeWidth={2} />

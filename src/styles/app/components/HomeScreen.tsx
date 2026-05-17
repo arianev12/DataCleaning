@@ -198,7 +198,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
             <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
               <Database className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-3xl font-bold">Welcome Back</h1>
+            <h1 className="text-3xl font-bold">Insight Flow</h1>
           </div>
           <div className="flex items-center space-x-2 ml-11" style={{ color: '#d7dfea' }}>
             <BarChart3 className="w-4 h-4 text-white" />
@@ -276,47 +276,55 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                 </p>
               </div>
 
-              {/* Selected Files List */}
-              {selectedFiles.length > 0 && (
-                <div className="mt-4 bg-white rounded-xl p-4 shadow-md" style={{ border: '1px solid #d7dfea' }}>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-bold flex items-center space-x-2" style={{ color: '#10263f' }}>
-                      <Layers className="w-4 h-4" style={{ color: '#3b82f6' }} />
-                      <span>Selected Files ({selectedFiles.length})</span>
-                    </h3>
-                  </div>
-                  <div className="space-y-2 max-h-48 overflow-auto mb-3">
-                    {selectedFiles.map((file, idx) => (
-                  <div className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'rgba(59, 130, 246, 0.10)' }}>
-                        <div className="flex items-center space-x-2 flex-1 min-w-0">
-                          <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: '#3b82f6' }} />
-                          <span className="text-sm truncate" style={{ color: '#10263f' }}>{file.name}</span>
-                          <span className="text-xs" style={{ color: '#3b82f6' }}>({(file.size / 1024).toFixed(1)} KB)</span>
-                        </div>
-                        <button
-                          onClick={() => handleRemoveFile(idx)}
-                          className="ml-2 text-xs font-semibold"
-                          style={{ color: '#3b82f6' }}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={handleCombineAndProcess}
-                    className="w-full px-4 py-2.5 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
-                    style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
-                  >
-                    <Layers className="w-4 h-4" />
-                    <span>Combine & Process {selectedFiles.length} {selectedFiles.length === 1 ? 'File' : 'Files'}</span>
-                  </button>
-                </div>
-              )}
             </div>
 
-            {/* Right: Recent Files */}
+            {/* Right: Selected Files + Recent Files */}
             <div>
+              {selectedFiles.length > 0 && (
+                <div className="mb-6">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
+                      <Layers className="w-4 h-4 text-white" />
+                    </div>
+                    <h2 className="text-xl font-bold" style={{ color: '#10263f' }}>Selected Files</h2>
+                  </div>
+                  <div className="bg-white rounded-xl p-4 shadow-md" style={{ border: '1px solid #d7dfea' }}>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-bold flex items-center space-x-2" style={{ color: '#10263f' }}>
+                        <Layers className="w-4 h-4" style={{ color: '#3b82f6' }} />
+                        <span>Selected Files ({selectedFiles.length})</span>
+                      </h3>
+                    </div>
+                    <div className="space-y-2 max-h-48 overflow-auto mb-3">
+                      {selectedFiles.map((file, idx) => (
+                        <div className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'rgba(59, 130, 246, 0.10)' }}>
+                          <div className="flex items-center space-x-2 flex-1 min-w-0">
+                            <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: '#3b82f6' }} />
+                            <span className="text-sm truncate" style={{ color: '#10263f' }}>{file.name}</span>
+                            <span className="text-xs" style={{ color: '#3b82f6' }}>({(file.size / 1024).toFixed(1)} KB)</span>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveFile(idx)}
+                            className="ml-2 text-xs font-semibold"
+                            style={{ color: '#3b82f6' }}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={handleCombineAndProcess}
+                      className="w-full px-4 py-2.5 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+                      style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}
+                    >
+                      <Layers className="w-4 h-4" />
+                      <span>Combine & Process {selectedFiles.length} {selectedFiles.length === 1 ? 'File' : 'Files'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center space-x-2 mb-4">
                 <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #10263f 0%, #123a5a 48%, #1e3350 100%)' }}>
                   <Clock className="w-4 h-4 text-white" />
@@ -339,7 +347,7 @@ export function HomeScreen({ onFileLoaded, recentFiles }: HomeScreenProps) {
                     </p>
                   </div>
                 ) : (
-                  <div className="divide-y" style={{ borderColor: '#d7dfea' }}>
+                  <div className="divide-y max-h-[252px] overflow-y-auto" style={{ borderColor: '#d7dfea' }}>
                     {recentFiles.map((file, idx) => {
                       const fileInfo = getFileInfo(file.name);
                       return (

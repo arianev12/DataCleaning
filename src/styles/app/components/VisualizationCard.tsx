@@ -10,9 +10,9 @@ interface VisualizationCardProps {
   visualization: Visualization;
   data: any[];
   columns: string[];
-  numericColumns: string[];
   onUpdate: (updates: Partial<Visualization>) => void;
   onRemove: () => void;
+  previewMode?: boolean;
 }
 
 const PRESET_COLORS = [
@@ -32,9 +32,9 @@ export function VisualizationCard({
   visualization,
   data,
   columns,
-  numericColumns,
   onUpdate,
-  onRemove
+  onRemove,
+  previewMode = false
 }: VisualizationCardProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const titleInputRef = useRef<HTMLInputElement | null>(null);
@@ -49,6 +49,39 @@ export function VisualizationCard({
   const [startSize, setStartSize] = useState({ width: 0, height: 0 });
   const idCounterRef = useRef(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const bodyStyleRef = useRef({ cursor: '', userSelect: '' });
+  const minCardWidth = 160;
+  const isTextVisualization = visualization.type === 'text';
+  const isTitleVisualization = isTextVisualization && visualization.showTitle === true && visualization.showTextBox === false;
+  const isTextBoxVisualization = isTextVisualization && visualization.showTextBox !== false && visualization.showTitle === false;
+  const minCardHeight = isTitleVisualization ? 80 : 120;
+  const showTextBox = !isTextVisualization || visualization.showTextBox !== false;
+  const baseWidth = 700;
+  const baseHeight = 450;
+  const contentScale = Math.min(1, Math.min(visualization.width / baseWidth, visualization.height / baseHeight));
+  const scaledTitleFontSize = Math.max(10, Math.round(visualization.titleFontSize * contentScale));
+  const scaledFontSize = Math.max(8, Math.round(visualization.fontSize * contentScale));
+  const scaledBodyFontSize = Math.max(10, Math.round((visualization.fontSize + 2) * contentScale));
+  const axisLabelHeight = Math.max(60, Math.round(100 * contentScale));
+  const axisLabelWidth = Math.max(80, Math.round(150 * contentScale));
+  const titlePlaceholder = isTextVisualization ? 'Add your title here' : 'Chart Title';
+  const canConfigureAxes = !isTextVisualization && visualization.type !== 'table';
+  const canShowTextFormatting = visualization.type !== 'table' && !isTextVisualization;
+  const isPreview = Boolean(previewMode);
+  const isNumericAxisColumn = (column: string) => {
+    const values = data
+      .map((row) => row[column])
+      .filter((value) => value !== null && value !== undefined && value !== '');
+    return values.length > 0 && !isNaN(Number(values[0]));
+  };
+
+  const titleStyle = {
+    color: visualization.titleColor,
+    fontSize: scaledTitleFontSize,
+    fontFamily: visualization.titleFontFamily,
+    fontWeight: visualization.titleBold ? 'bold' : 'normal',
+    fontStyle: visualization.titleItalic ? 'italic' : 'normal'
+  };
 
   useEffect(() => {
     const originalError = console.error;
@@ -76,11 +109,11 @@ export function VisualizationCard({
       const deltaY = e.clientY - startPos.y;
 
       if (resizeDirection === 'width' || resizeDirection === 'both') {
-        const newWidth = Math.max(300, startSize.width + deltaX);
+        const newWidth = Math.max(minCardWidth, startSize.width + deltaX);
         onUpdate({ width: newWidth });
       }
       if (resizeDirection === 'height' || resizeDirection === 'both') {
-        const newHeight = Math.max(200, startSize.height + deltaY);
+        const newHeight = Math.max(minCardHeight, startSize.height + deltaY);
         onUpdate({ height: newHeight });
       }
     };
@@ -91,9 +124,22 @@ export function VisualizationCard({
     };
 
     if (isResizing) {
+      bodyStyleRef.current = {
+        cursor: document.body.style.cursor,
+        userSelect: document.body.style.userSelect
+      };
+      const cursor = resizeDirection === 'width'
+        ? 'ew-resize'
+        : resizeDirection === 'height'
+          ? 'ns-resize'
+          : 'nwse-resize';
+      document.body.style.cursor = cursor;
+      document.body.style.userSelect = 'none';
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       return () => {
+        document.body.style.cursor = bodyStyleRef.current.cursor;
+        document.body.style.userSelect = bodyStyleRef.current.userSelect;
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
@@ -114,12 +160,13 @@ export function VisualizationCard({
     const generateId = () => {
       return `${visualization.type}_${visualization.xAxis}_${visualization.yAxis}_${idCounterRef.current++}`;
     };
+    const isNumericYAxis = isNumericAxisColumn(visualization.yAxis);
 
     if (visualization.type === 'pie' || visualization.type === 'donut') {
       const frequency: { [key: string]: number } = {};
       data.forEach((row) => {
         const key = String(row[visualization.xAxis] || 'N/A');
-        const value = Number(row[visualization.yAxis]) || 0;
+        const value = isNumericYAxis ? Number(row[visualization.yAxis]) || 0 : 1;
         frequency[key] = (frequency[key] || 0) + value;
       });
 
@@ -142,7 +189,7 @@ export function VisualizationCard({
 
       data.forEach((row) => {
         const key = String(row[visualization.xAxis] || 'N/A');
-        const value = Number(row[visualization.yAxis]) || 0;
+        const value = isNumericYAxis ? Number(row[visualization.yAxis]) || 0 : 1;
 
         if (!aggregated[key]) {
           aggregated[key] = { sum: 0, count: 0 };
@@ -155,7 +202,7 @@ export function VisualizationCard({
         .map(([name, dataItem]) => ({
           uniqueId: generateId(),
           name,
-          value: dataItem.sum / dataItem.count
+          value: isNumericYAxis ? dataItem.sum / dataItem.count : dataItem.count
         }));
     }
   };
@@ -163,26 +210,109 @@ export function VisualizationCard({
   const chartData = prepareChartData();
 
   const renderChart = () => {
-    if (visualization.type === 'text') {
-      return (
-        <div className="p-4" style={{ height: visualization.height }}>
-          <div className="h-full rounded-2xl border-2 border-dashed flex flex-col" style={{ borderColor: '#D7DFEA', background: 'linear-gradient(180deg, rgba(16, 38, 63, 0.03), rgba(59, 130, 246, 0.03))' }}>
-            <div className="px-4 pt-4 text-xs uppercase tracking-wide" style={{ color: '#6D8196' }}>Text Box</div>
-            <textarea
-              value={visualization.title}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-              placeholder="Type a title or note here..."
-              className="flex-1 w-full resize-none bg-transparent outline-none px-4 py-3"
+    if (isTextVisualization) {
+      if (isTitleVisualization) {
+        const titleValue = visualization.title || '';
+        const hasTitle = titleValue.trim().length > 0;
+        const displayTitle = hasTitle ? titleValue : titlePlaceholder;
+        const displayStyle = {
+          ...titleStyle,
+          color: hasTitle ? visualization.titleColor : '#9aa8b6',
+          fontWeight: hasTitle ? titleStyle.fontWeight : 'normal'
+        };
+
+        if (isPreview) {
+          return (
+            <div className="p-6" style={{ height: visualization.height }}>
+              <div className="h-full flex items-center justify-center">
+                <div style={titleStyle} className="text-center w-full">
+                  {hasTitle ? titleValue : ''}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div className="p-6" style={{ height: visualization.height }}>
+            <div
+              className="h-full rounded-2xl border-2 border-dashed flex items-center justify-center"
+              style={{ borderColor: '#D7DFEA', background: 'linear-gradient(180deg, rgba(16, 38, 63, 0.03), rgba(59, 130, 246, 0.03))' }}
+            >
+              {isEditingTitle ? (
+                <input
+                  ref={(el) => (titleInputRef.current = el)}
+                  type="text"
+                  value={visualization.title}
+                  onChange={(e) => onUpdate({ title: e.target.value })}
+                  onBlur={(e) => saveTitle(e.target.value)}
+                  onKeyDown={handleTitleKey}
+                  style={titleStyle}
+                  className="w-full bg-white/90 border-2 border-[#D7DFEA] rounded-xl px-4 py-3 outline-none text-center"
+                  placeholder={titlePlaceholder}
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsEditingTitle(true)}
+                  className="w-full text-center px-4 py-3"
+                  style={displayStyle}
+                >
+                  {displayTitle}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      const textValue = visualization.textBody || '';
+
+      if (isPreview) {
+        return (
+          <div className="p-4" style={{ height: visualization.height }}>
+            <div
+              className="h-full"
               style={{
                 color: visualization.textColor,
-                fontSize: visualization.fontSize + 2,
+                fontSize: scaledBodyFontSize,
                 fontFamily: visualization.fontFamily,
                 fontWeight: visualization.titleBold ? 'bold' : 'normal',
                 fontStyle: visualization.titleItalic ? 'italic' : 'normal',
-                minHeight: visualization.height - 60
+                whiteSpace: 'pre-wrap'
               }}
-            />
+            >
+              {textValue}
+            </div>
           </div>
+        );
+      }
+
+      return (
+        <div className="p-4" style={{ height: visualization.height }}>
+          {showTextBox ? (
+            <div className="h-full rounded-2xl border-2 border-dashed flex flex-col" style={{ borderColor: '#D7DFEA', background: 'linear-gradient(180deg, rgba(16, 38, 63, 0.03), rgba(59, 130, 246, 0.03))' }}>
+              {!isTextBoxVisualization ? null : (
+                <div className="px-4 pt-4 text-xs uppercase tracking-wide" style={{ color: '#6D8196' }}>Text Box</div>
+              )}
+              <textarea
+                value={textValue}
+                onChange={(e) => onUpdate({ textBody: e.target.value })}
+                placeholder="Add your text here"
+                className="flex-1 w-full resize-none bg-transparent outline-none px-4 py-3"
+                style={{
+                  color: visualization.textColor,
+                  fontSize: scaledBodyFontSize,
+                  fontFamily: visualization.fontFamily,
+                  fontWeight: visualization.titleBold ? 'bold' : 'normal',
+                  fontStyle: visualization.titleItalic ? 'italic' : 'normal',
+                  minHeight: visualization.height - 60
+                }}
+              />
+            </div>
+          ) : (
+            <div className="h-full" />
+          )}
         </div>
       );
     }
@@ -192,7 +322,7 @@ export function VisualizationCard({
         <div className="overflow-auto" style={{ height: visualization.height }}>
           <table className="w-full text-sm" style={{
             fontFamily: visualization.fontFamily,
-            fontSize: visualization.fontSize,
+            fontSize: scaledFontSize,
             color: visualization.textColor
           }}>
             <thead className="sticky top-0" style={{ background: 'linear-gradient(to right, rgba(16, 38, 63, 0.08), rgba(59, 130, 246, 0.12))', zIndex: 10 }}>
@@ -217,7 +347,7 @@ export function VisualizationCard({
     }
 
     const commonAxisProps = {
-      tick: { fontSize: visualization.fontSize, fill: visualization.textColor, fontFamily: visualization.fontFamily }
+      tick: { fontSize: scaledFontSize, fill: visualization.textColor, fontFamily: visualization.fontFamily }
     };
 
     return (
@@ -225,37 +355,68 @@ export function VisualizationCard({
         {visualization.type === 'bar' ? (
           <BarChart data={chartData}>
             {visualization.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} {...commonAxisProps} />
-            <YAxis {...commonAxisProps} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              height={axisLabelHeight}
+              label={{ value: visualization.xAxis, position: 'insideBottom', offset: -5 }}
+              {...commonAxisProps}
+            />
+            <YAxis label={{ value: visualization.yAxis, angle: -90, position: 'insideLeft', offset: -5 }} {...commonAxisProps} />
             <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
             <Bar dataKey="value" fill={visualization.chartColor} name={visualization.yAxis} radius={[4, 4, 0, 0]} />
           </BarChart>
         ) : visualization.type === 'column' ? (
           <BarChart data={chartData} layout="vertical">
             {visualization.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis type="number" {...commonAxisProps} />
-            <YAxis dataKey="name" type="category" width={150} {...commonAxisProps} />
+            <XAxis
+              type="number"
+              label={{ value: visualization.yAxis, position: 'insideBottom', offset: -5 }}
+              {...commonAxisProps}
+            />
+            <YAxis
+              dataKey="name"
+              type="category"
+              width={axisLabelWidth}
+              label={{ value: visualization.xAxis, angle: -90, position: 'insideLeft', offset: -5 }}
+              {...commonAxisProps}
+            />
             <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
             <Bar dataKey="value" fill={visualization.chartColor} name={visualization.yAxis} radius={[0, 4, 4, 0]} />
           </BarChart>
         ) : visualization.type === 'stackedBar' ? (
           <BarChart data={chartData}>
             {visualization.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} {...commonAxisProps} />
-            <YAxis {...commonAxisProps} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              height={axisLabelHeight}
+              label={{ value: visualization.xAxis, position: 'insideBottom', offset: -5 }}
+              {...commonAxisProps}
+            />
+            <YAxis label={{ value: visualization.yAxis, angle: -90, position: 'insideLeft', offset: -5 }} {...commonAxisProps} />
             <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
             <Bar dataKey="value" stackId="a" fill={visualization.chartColor} name={visualization.yAxis} radius={[4, 4, 0, 0]} />
           </BarChart>
         ) : visualization.type === 'line' ? (
           <LineChart data={chartData}>
             {visualization.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} {...commonAxisProps} />
-            <YAxis {...commonAxisProps} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              height={axisLabelHeight}
+              label={{ value: visualization.xAxis, position: 'insideBottom', offset: -5 }}
+              {...commonAxisProps}
+            />
+            <YAxis label={{ value: visualization.yAxis, angle: -90, position: 'insideLeft', offset: -5 }} {...commonAxisProps} />
             <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
             <Line
               type="monotone"
               dataKey="value"
@@ -269,10 +430,17 @@ export function VisualizationCard({
         ) : visualization.type === 'area' ? (
           <AreaChart data={chartData}>
             {visualization.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} {...commonAxisProps} />
-            <YAxis {...commonAxisProps} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              height={axisLabelHeight}
+              label={{ value: visualization.xAxis, position: 'insideBottom', offset: -5 }}
+              {...commonAxisProps}
+            />
+            <YAxis label={{ value: visualization.yAxis, angle: -90, position: 'insideLeft', offset: -5 }} {...commonAxisProps} />
             <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
             <Area
               type="monotone"
               dataKey="value"
@@ -300,7 +468,7 @@ export function VisualizationCard({
               ))}
             </Pie>
             <Tooltip />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
           </PieChart>
         ) : visualization.type === 'donut' ? (
           <PieChart>
@@ -321,15 +489,25 @@ export function VisualizationCard({
               ))}
             </Pie>
             <Tooltip />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
           </PieChart>
         ) : visualization.type === 'scatter' ? (
           <ScatterChart>
             {visualization.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis dataKey="x" name={visualization.xAxis} {...commonAxisProps} />
-            <YAxis dataKey="y" name={visualization.yAxis} {...commonAxisProps} />
+            <XAxis
+              dataKey="x"
+              name={visualization.xAxis}
+              label={{ value: visualization.xAxis, position: 'insideBottom', offset: -5 }}
+              {...commonAxisProps}
+            />
+            <YAxis
+              dataKey="y"
+              name={visualization.yAxis}
+              label={{ value: visualization.yAxis, angle: -90, position: 'insideLeft', offset: -5 }}
+              {...commonAxisProps}
+            />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: visualization.fontSize, fontFamily: visualization.fontFamily }} />}
+            {visualization.showLegend && <Legend wrapperStyle={{ fontSize: scaledFontSize, fontFamily: visualization.fontFamily }} />}
             <Scatter name={`${visualization.xAxis} vs ${visualization.yAxis}`} data={chartData} fill={visualization.chartColor} />
           </ScatterChart>
         ) : (
@@ -339,14 +517,6 @@ export function VisualizationCard({
         )}
       </ResponsiveContainer>
     );
-  };
-
-  const titleStyle = {
-    color: visualization.titleColor,
-    fontSize: visualization.titleFontSize,
-    fontFamily: visualization.titleFontFamily,
-    fontWeight: visualization.titleBold ? 'bold' : 'normal',
-    fontStyle: visualization.titleItalic ? 'italic' : 'normal'
   };
 
   const saveTitle = (val: string) => {
@@ -370,115 +540,92 @@ export function VisualizationCard({
   return (
     <div
       ref={cardRef}
-      className="group bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border-2 overflow-hidden transition-all duration-300 hover:shadow-2xl relative hover:scale-[1.02]"
-      style={{ width: Math.max(visualization.width, 350), borderColor: '#D7DFEA' }}
+      className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border-2 overflow-hidden relative ${
+        isPreview ? '' : 'group transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]'
+      }`}
+      style={{ width: Math.max(visualization.width, minCardWidth), borderColor: '#D7DFEA' }}
     >
-      {/* Header */}
-      <div className="border-b-2 px-5 py-4 flex flex-col gap-3" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
-        <div
-          className="relative w-full"
-          onMouseEnter={() => setShowTitleControls(true)}
-          onMouseLeave={() => setShowTitleControls(false)}
-        >
-          {isEditingTitle ? (
-            <input
-              ref={(el) => (titleInputRef.current = el)}
-              type="text"
-              value={visualization.title}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-              onBlur={(e) => {
-                onUpdate({ title: e.target.value });
-                setIsEditingTitle(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  (e.target as HTMLInputElement).blur();
-                }
-              }}
-              style={titleStyle}
-              className="w-full bg-white border-2 border-[#D7DFEA] outline-none rounded-xl px-4 py-2 pr-44 transition-all duration-200"
-              placeholder="Chart Title"
-            />
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsEditingTitle(true)}
-              onDoubleClick={() => setIsEditingTitle(true)}
-              style={titleStyle}
-              className="w-full text-left bg-transparent border-0 outline-none px-1 py-1 pr-44 transition-all duration-200 cursor-text"
-            >
-              <span className="block truncate">{visualization.title || 'Chart Title'}</span>
-            </button>
-          )}
+      {!isPreview && (
+        <div className="border-b-2 px-5 py-4" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <div
-            className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-1.5 flex-wrap gap-y-1.5 justify-end transition-all duration-200 ${showTitleControls || isEditingTitle ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-2 pointer-events-none'}`}
+            className="relative w-full flex items-center justify-end"
+            onMouseEnter={() => setShowTitleControls(true)}
+            onMouseLeave={() => setShowTitleControls(false)}
           >
-          <button
-            onClick={() => setShowConfig(!showConfig)}
-            className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
-              showConfig
-                ? 'text-white shadow-lg'
-                : 'bg-white/50 hover:bg-white'
-              }
-              style={showConfig ? { background: '#6D8196' } : { color: '#6B6B6B' }}
-            }`}
-            title="Configure Axes"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowTitleFormatting(!showTitleFormatting)}
-            className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
-              showTitleFormatting
-                ? 'text-white shadow-lg'
-                : 'bg-white/50 hover:bg-white'
-              }
-              style={showTitleFormatting ? { background: '#6D8196' } : { color: '#6B6B6B' }}
-            }`}
-            title="Title Formatting"
-          >
-            <Type className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowTextFormatting(!showTextFormatting)}
-            className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
-              showTextFormatting
-                ? 'text-white shadow-lg'
-                : 'bg-white/50 hover:bg-white'
-              }
-              style={showTextFormatting ? { background: '#6D8196' } : { color: '#6B6B6B' }}
-            }`}
-            title="Text Formatting"
-          >
-            <Type className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => setShowColorPicker(!showColorPicker)}
-            className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
-              showColorPicker
-                ? 'text-white shadow-lg'
-                : 'bg-white/50 hover:bg-white'
-              }
-              style={showColorPicker ? { background: '#6D8196' } : { color: '#6B6B6B' }}
-            }`}
-            title="Chart Color"
-          >
-            <Palette className="w-4 h-4" />
-          </button>
-          <button
-            onClick={onRemove}
-            className="p-2.5 rounded-xl transition-all duration-200 hover:scale-110 bg-white/50 hover:shadow-lg"
-            style={{ color: '#6B6B6B' }}
-            title="Remove"
-          >
-            <X className="w-4 h-4" />
-          </button>
+            <div
+              className={`flex items-center space-x-1.5 flex-wrap gap-y-1.5 justify-end transition-all duration-200 ${showTitleControls || isEditingTitle ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-70 translate-x-0 pointer-events-auto'}`}
+            >
+              {canConfigureAxes && (
+                <button
+                  onClick={() => setShowConfig(!showConfig)}
+                  className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
+                    showConfig
+                      ? 'text-white shadow-lg'
+                      : 'bg-white/50 hover:bg-white'
+                    }
+                    style={showConfig ? { background: '#6D8196' } : { color: '#6B6B6B' }}
+                  }`}
+                  title="Configure Axes"
+                >
+                  <Settings className="w-4 h-4" />
+                </button>
+              )}
+              <button
+                onClick={() => setShowTitleFormatting(!showTitleFormatting)}
+                className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
+                  showTitleFormatting
+                    ? 'text-white shadow-lg'
+                    : 'bg-white/50 hover:bg-white'
+                  }
+                  style={showTitleFormatting ? { background: '#6D8196' } : { color: '#6B6B6B' }}
+                }`}
+                title="Title Formatting"
+              >
+                <Type className="w-4 h-4" />
+              </button>
+              {canShowTextFormatting && (
+                <button
+                  onClick={() => setShowTextFormatting(!showTextFormatting)}
+                  className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
+                    showTextFormatting
+                      ? 'text-white shadow-lg'
+                      : 'bg-white/50 hover:bg-white'
+                    }
+                    style={showTextFormatting ? { background: '#6D8196' } : { color: '#6B6B6B' }}
+                  }`}
+                  title="Text Formatting"
+                >
+                  <Type className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <button
+                onClick={() => setShowColorPicker(!showColorPicker)}
+                className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 ${
+                  showColorPicker
+                    ? 'text-white shadow-lg'
+                    : 'bg-white/50 hover:bg-white'
+                  }
+                  style={showColorPicker ? { background: '#6D8196' } : { color: '#6B6B6B' }}
+                }`}
+                title="Chart Color"
+              >
+                <Palette className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onRemove}
+                className="p-2.5 rounded-xl transition-all duration-200 hover:scale-110 bg-white/50 hover:shadow-lg"
+                style={{ color: '#6B6B6B' }}
+                title="Remove"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
-        </div>
-      </div>
+      )}
 
       {/* Configuration Panel - Axes */}
-      {showConfig && visualization.type !== 'table' && (
+      {!isPreview && showConfig && canConfigureAxes && (
         <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
@@ -501,9 +648,7 @@ export function VisualizationCard({
                 onChange={(e) => onUpdate({ yAxis: e.target.value })}
                 className="w-full px-3 py-2 border-2 border-[#D7DFEA] rounded-lg focus:border-blue-500 outline-none"
               >
-                {numericColumns.length > 0 ? numericColumns.map((col) => (
-                  <option key={col} value={col}>{col}</option>
-                )) : columns.map((col) => (
+                {columns.map((col) => (
                   <option key={col} value={col}>{col}</option>
                 ))}
               </select>
@@ -540,7 +685,7 @@ export function VisualizationCard({
       )}
 
       {/* Title Formatting Panel */}
-      {showTitleFormatting && (
+      {!isPreview && showTitleFormatting && (
         <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <div className="text-sm mb-3 text-[#10263f]">Title Formatting</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -609,7 +754,7 @@ export function VisualizationCard({
       )}
 
       {/* Text Formatting Panel */}
-      {showTextFormatting && visualization.type !== 'table' && (
+      {!isPreview && showTextFormatting && canShowTextFormatting && (
         <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <div className="text-sm mb-3 text-[#10263f]">Chart Text Formatting</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -653,7 +798,7 @@ export function VisualizationCard({
       )}
 
       {/* Color Picker */}
-      {showColorPicker && visualization.type !== 'table' && visualization.type !== 'pie' && visualization.type !== 'donut' && (
+      {!isPreview && showColorPicker && visualization.type !== 'table' && visualization.type !== 'pie' && visualization.type !== 'donut' && (
         <div className="border-b-2 p-5" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
           <label className="block text-[#10263f] text-sm mb-3">Chart Color</label>
           <div className="grid grid-cols-4 gap-2">
@@ -689,105 +834,95 @@ export function VisualizationCard({
 
       {/* Chart Content */}
       <div className="p-6 relative" style={{ background: '#FFFFFF' }}>
-        <div className="absolute left-6 right-6 top-3 z-20">
-          {isEditingTitle ? (
-            <input
-              ref={(el) => (titleInputRef.current = el)}
-              type="text"
-              value={visualization.title}
-              onChange={(e) => onUpdate({ title: e.target.value })}
-              onBlur={(e) => saveTitle(e.target.value)}
-              onKeyDown={handleTitleKey}
-              style={titleStyle}
-              className="w-full bg-white/90 border-2 border-[#D7DFEA] rounded-xl px-3 py-2 outline-none"
-            />
-          ) : (
-            <div onClick={() => setIsEditingTitle(true)} style={{ cursor: 'text' }}>
-              <div style={titleStyle} className="text-base font-semibold truncate text-center">{visualization.title}</div>
-            </div>
-          )}
-        </div>
+        {!isTextVisualization && visualization.title && (
+          <div className="absolute left-6 right-6 top-3 z-20">
+            {isEditingTitle && !isPreview ? (
+              <input
+                ref={(el) => (titleInputRef.current = el)}
+                type="text"
+                value={visualization.title}
+                onChange={(e) => onUpdate({ title: e.target.value })}
+                onBlur={(e) => saveTitle(e.target.value)}
+                onKeyDown={handleTitleKey}
+                style={titleStyle}
+                className="w-full bg-white/90 border-2 border-[#D7DFEA] rounded-xl px-3 py-2 outline-none"
+              />
+            ) : (
+              <div onClick={() => !isPreview && setIsEditingTitle(true)} style={{ cursor: isPreview ? 'default' : 'text' }}>
+                <div style={titleStyle} className="text-base font-semibold truncate text-center">{visualization.title}</div>
+              </div>
+            )}
+          </div>
+        )}
         {renderChart()}
-
-        {/* Resize Handles - All 4 corners and 4 edges */}
-        {/* Bottom-Right Corner */}
-        <div
-          className="absolute bottom-0 right-0 w-5 h-5 cursor-nwse-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('both', e)}
-          title="Resize"
-        />
-        {/* Bottom-Left Corner */}
-        <div
-          className="absolute bottom-0 left-0 w-5 h-5 cursor-nesw-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('both', e)}
-          title="Resize"
-        />
-        {/* Top-Right Corner */}
-        <div
-          className="absolute top-0 right-0 w-5 h-5 cursor-nesw-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('both', e)}
-          title="Resize"
-        />
-        {/* Top-Left Corner */}
-        <div
-          className="absolute top-0 left-0 w-5 h-5 cursor-nwse-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:scale-150 transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('both', e)}
-          title="Resize"
-        />
-        {/* Bottom Edge */}
-        <div
-          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-3 cursor-ns-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:h-4 rounded-t-lg transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('height', e)}
-          title="Resize height"
-        />
-        {/* Top Edge */}
-        <div
-          className="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-3 cursor-ns-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:h-4 rounded-b-lg transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('height', e)}
-          title="Resize height"
-        />
-        {/* Right Edge */}
-        <div
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-16 cursor-ew-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:w-4 rounded-l-lg transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('width', e)}
-          title="Resize width"
-        />
-        {/* Left Edge */}
-        <div
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 w-3 h-16 cursor-ew-resize opacity-0 group-hover:opacity-80 hover:opacity-100 hover:w-4 rounded-r-lg transition-all duration-200"
-          style={{ background: '#6D8196' }}
-          onMouseDown={(e) => startResize('width', e)}
-          title="Resize width"
-        />
+        {!isPreview && (
+          <>
+            <div
+              className="absolute bottom-0 right-0 w-7 h-7 cursor-nwse-resize opacity-70 hover:opacity-100 transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('both', e)}
+              title="Resize"
+            />
+            <div
+              className="absolute bottom-0 left-0 w-7 h-7 cursor-nesw-resize opacity-70 hover:opacity-100 transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('both', e)}
+              title="Resize"
+            />
+            <div
+              className="absolute top-0 right-0 w-7 h-7 cursor-nesw-resize opacity-70 hover:opacity-100 transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('both', e)}
+              title="Resize"
+            />
+            <div
+              className="absolute top-0 left-0 w-7 h-7 cursor-nwse-resize opacity-70 hover:opacity-100 transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('both', e)}
+              title="Resize"
+            />
+            <div
+              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-4 cursor-ns-resize opacity-70 hover:opacity-100 rounded-t-lg transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('height', e)}
+              title="Resize height"
+            />
+            <div
+              className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-4 cursor-ns-resize opacity-70 hover:opacity-100 rounded-b-lg transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('height', e)}
+              title="Resize height"
+            />
+            <div
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-24 cursor-ew-resize opacity-70 hover:opacity-100 rounded-l-lg transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('width', e)}
+              title="Resize width"
+            />
+            <div
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 w-4 h-24 cursor-ew-resize opacity-70 hover:opacity-100 rounded-r-lg transition-all duration-200"
+              style={{ background: '#6D8196' }}
+              onMouseDown={(e) => startResize('width', e)}
+              title="Resize width"
+            />
+          </>
+        )}
       </div>
 
         {/* Footer */}
       {visualization.type !== 'table' && (
         <div className="border-t-2 px-5 py-3 text-xs flex items-center justify-between" style={{ background: '#FFFFFF', borderColor: '#D7DFEA' }}>
-          <div className="flex items-center space-x-2">
-            <div className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg font-medium">
-              {visualization.xAxis}
+          <div />
+          {!isPreview && (
+            <div className="flex items-center space-x-3 text-[#D7DFEA]">
+              <span className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>{chartData.length} points</span>
+              </span>
+              <span className="text-[#D7DFEA]">•</span>
+              <span>{visualization.width}×{visualization.height}px</span>
             </div>
-            <span className="text-[#D7DFEA]">×</span>
-            <div className="px-2 py-1 bg-purple-100 text-purple-700 rounded-lg font-medium">
-              {visualization.yAxis}
-            </div>
-          </div>
-          <div className="flex items-center space-x-3 text-[#D7DFEA]">
-            <span className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>{chartData.length} points</span>
-            </span>
-            <span className="text-[#D7DFEA]">•</span>
-            <span>{visualization.width}×{visualization.height}px</span>
-          </div>
+          )}
         </div>
       )}
     </div>

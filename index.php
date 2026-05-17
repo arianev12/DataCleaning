@@ -104,6 +104,13 @@ if (file_exists($distIndex)) {
   $html = str_replace('"/favicon', '"' . $distPrefix . '/favicon', $html);
   $html = str_replace("'/favicon", "'" . $distPrefix . '/favicon', $html);
 
+  if ($basePrefix !== '') {
+    $html = str_replace('"' . $basePrefix . '/assets/', '"' . $distPrefix . '/assets/', $html);
+    $html = str_replace("'" . $basePrefix . '/assets/', "'" . $distPrefix . '/assets/', $html);
+    $html = str_replace('"' . $basePrefix . '/favicon', '"' . $distPrefix . '/favicon', $html);
+    $html = str_replace("'" . $basePrefix . '/favicon', "'" . $distPrefix . '/favicon', $html);
+  }
+
   // Ensure the <base> tag (if exists) uses the current folder so relative URLs resolve
   if (stripos($html, '<base') !== false) {
     $baseHref = ($basePrefix === '') ? '/' : $basePrefix . '/';
